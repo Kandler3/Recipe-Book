@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBookApp", "RecipeBookApp\RecipeBookApp.csproj", "{809DBF7A-B6A2-48C2-9AB8-BC022828C754}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{A4D4B564-3FCD-45FD-9776-EAD5E1E9ABF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serializers", "Serializers\Serializers.csproj", "{4FB19361-CB8E-4970-8943-0BC38D5510CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingListGenerator", "ShoppingListGenerator\ShoppingListGenerator.csproj", "{AF0CA702-4349-46D0-8645-340FE040BEBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeGenerator", "RecipeGenerator\RecipeGenerator.csproj", "{161FB236-FC42-4E3B-BEEE-5E08FAB5CD8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleUI", "ConsoleUI\ConsoleUI.csproj", "{3EADFF17-14FA-4B0D-9612-5F0CD366D3D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{809DBF7A-B6A2-48C2-9AB8-BC022828C754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{809DBF7A-B6A2-48C2-9AB8-BC022828C754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{809DBF7A-B6A2-48C2-9AB8-BC022828C754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{809DBF7A-B6A2-48C2-9AB8-BC022828C754}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4D4B564-3FCD-45FD-9776-EAD5E1E9ABF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4D4B564-3FCD-45FD-9776-EAD5E1E9ABF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4D4B564-3FCD-45FD-9776-EAD5E1E9ABF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4D4B564-3FCD-45FD-9776-EAD5E1E9ABF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FB19361-CB8E-4970-8943-0BC38D5510CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FB19361-CB8E-4970-8943-0BC38D5510CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FB19361-CB8E-4970-8943-0BC38D5510CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FB19361-CB8E-4970-8943-0BC38D5510CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF0CA702-4349-46D0-8645-340FE040BEBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF0CA702-4349-46D0-8645-340FE040BEBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF0CA702-4349-46D0-8645-340FE040BEBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF0CA702-4349-46D0-8645-340FE040BEBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{161FB236-FC42-4E3B-BEEE-5E08FAB5CD8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{161FB236-FC42-4E3B-BEEE-5E08FAB5CD8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{161FB236-FC42-4E3B-BEEE-5E08FAB5CD8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{161FB236-FC42-4E3B-BEEE-5E08FAB5CD8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EADFF17-14FA-4B0D-9612-5F0CD366D3D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EADFF17-14FA-4B0D-9612-5F0CD366D3D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EADFF17-14FA-4B0D-9612-5F0CD366D3D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EADFF17-14FA-4B0D-9612-5F0CD366D3D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
