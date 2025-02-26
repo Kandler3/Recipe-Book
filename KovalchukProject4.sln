@@ -12,7 +12,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeGenerator", "RecipeGe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleUI", "ConsoleUI\ConsoleUI.csproj", "{3EADFF17-14FA-4B0D-9612-5F0CD366D3D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{B9B77C66-96C5-4AFD-AFF3-4791AA1E302A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +50,9 @@ Global
 		{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68A8D909-69E4-44D9-A92C-A80D9E6EDD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9B77C66-96C5-4AFD-AFF3-4791AA1E302A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9B77C66-96C5-4AFD-AFF3-4791AA1E302A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9B77C66-96C5-4AFD-AFF3-4791AA1E302A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9B77C66-96C5-4AFD-AFF3-4791AA1E302A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
