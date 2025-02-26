@@ -1,6 +1,4 @@
-﻿using Spectre.Console;
-
-namespace ConsoleUI;
+﻿namespace ConsoleUI;
 
 public class MenuOption
 {

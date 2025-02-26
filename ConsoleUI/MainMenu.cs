@@ -4,19 +4,28 @@ using Spectre.Console;
 
 namespace ConsoleUI;
 
-public class MainMenu(IAnsiConsole console, IRecipeService recipeService)
+public class MainMenu(IAnsiConsole console, IRecipeService recipeService, Action onReturn)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService RecipeService { get; } = recipeService;
     private IRecipesQuery RecipesQuery { get; } = new RecipesQuery();
-    private SelectionPrompt<MenuOption> MenuSelectionPrompt  => new SelectionPrompt<MenuOption>().AddChoices(
-        new MenuOption("Показать рецепты", OnShowRecipes)
+    private Action OnReturn { get; } = onReturn;
+
+    private SelectionPrompt<MenuOption> MenuSelectionPrompt => new SelectionPrompt<MenuOption>()
+        .PageSize(10)
+        .AddChoices(
+            new MenuOption("Импортировать рецепты", () => { }),
+            new MenuOption("Экспортировать рецепты", () => { }),
+            new MenuOption("Показать рецепты", OnShowRecipes),
+            new MenuOption("Добавить фильтр", () => { }),
+            new MenuOption("Добавить сортировку", () => { }),
+            new MenuOption("Добавить рецепт", () => { }),
+            new MenuOption("Выйти", OnReturn)
         );
 
     private void OnShowRecipes()
     {
-        IList<Recipe> recipes = RecipeService.GetRecipes(RecipesQuery);
-        new RecipesTable(Console, recipes, Show).Show();
+        new RecipesTable(Console, RecipeService, RecipesQuery, Show).Show();
     }
 
     public void Show()

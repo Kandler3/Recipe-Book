@@ -11,8 +11,9 @@ public class ConsoleApp(IAnsiConsole console, IRecipeService recipeService)
 
     public void Run()
     {
-        MainMenu mainMenu = new(Console, RecipeService);
-        while (true)
+        bool run = true;
+        MainMenu mainMenu = new(Console, RecipeService, () => run = false);
+        while (run)
         {
             mainMenu.Show();
         }
