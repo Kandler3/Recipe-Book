@@ -3,7 +3,7 @@ using Models;
 
 namespace Serializers;
 
-public class TxtSerializer : IRecipeSerializer
+public class TxtRecipeSerializer : IRecipeSerializer
 {
     private enum Field
     {

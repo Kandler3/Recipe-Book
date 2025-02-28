@@ -1,4 +1,5 @@
-﻿using ConsoleUI;
+﻿using System.Text.Json;
+using ConsoleUI;
 using Contracts;
 using Serializers;
 using Services;
@@ -17,9 +18,9 @@ public static class Program
 
     public static void Main()
     {
-        IRecipeSerializer txtSerializer = new TxtSerializer();
-        IRecipeSerializer jsonSerializer = new MockSerializer();
-        IRecipeSerializer csvSerializer = new MockSerializer();
+        IRecipeSerializer txtSerializer = new TxtRecipeSerializer();
+        IRecipeSerializer jsonSerializer = new JsonRecipeSerializer(false);
+        IRecipeSerializer csvSerializer = new CsvRecipeSerializer();
 
         IRecipeService service = new RecipeService(
             txtSerializer,
