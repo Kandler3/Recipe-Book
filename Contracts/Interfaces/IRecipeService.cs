@@ -11,5 +11,5 @@ public interface IRecipeService
     public void DeleteRecipe(Recipe recipe);
     public void AddRecipeImage(Recipe recipe, string imagePath);
     public void Import(string filepath, FileFormat format);
-    public void Export(string filepath, FileFormat format);
+    public void Export(string filepath, FileFormat format, IRecipesQuery? query = null);
 }

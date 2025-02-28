@@ -4,10 +4,12 @@ using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
-public class ExportPage(IAnsiConsole console, IRecipeService service)
+public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQuery query)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
+    
+    private RecipesQuery Query { get; } = query;
 
     public void Show()
     {
@@ -16,7 +18,7 @@ public class ExportPage(IAnsiConsole console, IRecipeService service)
         string filepath = new FilepathPrompt(Console, "Введите путь до файла", false, format).Ask();
         try
         {
-            Service.Export(filepath, format);
+            Service.Export(filepath, format, query);
         }
         catch (IOException)
         {

@@ -1,4 +1,5 @@
-﻿using ConsoleUI.Widgets;
+﻿using ConsoleUI.Prompts;
+using ConsoleUI.Widgets;
 using Contracts;
 using Spectre.Console;
 
@@ -21,7 +22,7 @@ public class MainPage(IAnsiConsole console, IRecipeService recipeService, Action
             new MenuOption("Сортировка", OnAddSort),
             new MenuOption("Добавить рецепт", OnAddRecipe),
             new MenuOption("Рецепт дня", OnShowRandomRecipe),
-            new MenuOption("Выйти", OnReturn)
+            new MenuOption("Выйти", OnExit)
         );
 
     private void OnShowRecipes()
@@ -36,7 +37,7 @@ public class MainPage(IAnsiConsole console, IRecipeService recipeService, Action
 
     private void OnExport()
     {
-        new ExportPage(Console, RecipeService).Show();
+        new ExportPage(Console, RecipeService, RecipesQuery).Show();
     }
 
     private void OnAddFilter()
@@ -51,12 +52,20 @@ public class MainPage(IAnsiConsole console, IRecipeService recipeService, Action
 
     private void OnAddRecipe()
     {
-        
+        new AddRecipePage(Console, RecipeService).Show();
     }
 
     private void OnShowRandomRecipe()
     {
         new RandomRecipePage(Console, RecipeService).Show();
+    }
+
+    private void OnExit()
+    {
+        if (new ConfirmPrompt(Console, "Сохранить данные перед выходом?").Ask())
+            new ExportPage(Console, RecipeService, RecipesQuery).Show();
+        
+        OnReturn();
     }
 
     public void Show()

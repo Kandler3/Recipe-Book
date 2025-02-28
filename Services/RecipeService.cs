@@ -6,7 +6,7 @@ namespace Services;
 
 public class RecipeService : IRecipeService
 {
-    private List<Recipe> Recipes { get; } = [];
+    private List<Recipe> Recipes { get; set; } = [];
     private IRecipeSerializer TxtSerializer { get; }
     private IRecipeSerializer JsonSerializer { get; }
     private IRecipeSerializer CsvSerializer { get; }
@@ -97,8 +97,11 @@ public class RecipeService : IRecipeService
         );
     }
 
-    public void Export(string filepath, FileFormat format)
+    public void Export(string filepath, FileFormat format, IRecipesQuery? query = null)
     {
+        if (query != null)
+            Recipes = GetRecipes(query).ToList();
+            
         switch (format)
         {
             case FileFormat.Txt: TxtSerializer.Serialize(Recipes, filepath); break;
