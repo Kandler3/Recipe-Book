@@ -4,7 +4,7 @@ using Contracts;
 using Models;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Pages;
 
 public class RecipePage(IAnsiConsole console, IRecipeService service,Recipe recipe)
 {

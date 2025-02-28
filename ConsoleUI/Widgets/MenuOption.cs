@@ -1,4 +1,4 @@
-﻿namespace ConsoleUI;
+﻿namespace ConsoleUI.Widgets;
 
 public class MenuOption
 {

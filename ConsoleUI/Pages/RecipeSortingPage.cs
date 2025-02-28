@@ -2,9 +2,9 @@
 using Contracts;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Pages;
 
-public class RecipeSortingPrompt(IAnsiConsole console, RecipesQuery query)
+public class RecipeSortingPage(IAnsiConsole console, RecipesQuery query)
 {
     private IAnsiConsole Console { get; } = console;
     private RecipesQuery Query { get; } = query;

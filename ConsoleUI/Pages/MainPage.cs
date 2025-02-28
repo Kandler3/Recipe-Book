@@ -1,9 +1,10 @@
-﻿using Contracts;
+﻿using ConsoleUI.Widgets;
+using Contracts;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Pages;
 
-public class MainMenu(IAnsiConsole console, IRecipeService recipeService, Action onReturn)
+public class MainPage(IAnsiConsole console, IRecipeService recipeService, Action onReturn)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService RecipeService { get; } = recipeService;
@@ -30,22 +31,22 @@ public class MainMenu(IAnsiConsole console, IRecipeService recipeService, Action
 
     private void OnImport()
     {
-        new ImportMenu(Console, RecipeService).Show();
+        new ImportPage(Console, RecipeService).Show();
     }
 
     private void OnExport()
     {
-        new ExportMenu(Console, RecipeService).Show();
+        new ExportPage(Console, RecipeService).Show();
     }
 
     private void OnAddFilter()
     {
-        new RecipeFilterPrompt(Console, RecipeService, RecipesQuery).Show();
+        new RecipeFilterPage(Console, RecipeService, RecipesQuery).Show();
     }
 
     private void OnAddSort()
     {
-        new RecipeSortingPrompt(Console, RecipesQuery).Show();
+        new RecipeSortingPage(Console, RecipesQuery).Show();
     }
 
     private void OnAddRecipe()

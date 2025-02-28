@@ -2,9 +2,9 @@
 using Contracts;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Pages;
 
-public class RecipeFilterPrompt(IAnsiConsole console, IRecipeService service, RecipesQuery query)
+public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, RecipesQuery query)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;

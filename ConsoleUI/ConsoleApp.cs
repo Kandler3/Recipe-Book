@@ -1,4 +1,4 @@
-﻿using System.Data.SqlTypes;
+﻿using ConsoleUI.Pages;
 using Contracts;
 using Spectre.Console;
 
@@ -12,10 +12,10 @@ public class ConsoleApp(IAnsiConsole console, IRecipeService recipeService)
     public void Run()
     {
         bool run = true;
-        MainMenu mainMenu = new(Console, RecipeService, () => run = false);
+        MainPage mainPage = new(Console, RecipeService, () => run = false);
         while (run)
         {
-            mainMenu.Show();
+            mainPage.Show();
         }
     }
 }

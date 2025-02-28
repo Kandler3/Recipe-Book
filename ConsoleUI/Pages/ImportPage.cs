@@ -2,9 +2,9 @@
 using Contracts;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Pages;
 
-public class ImportMenu(IAnsiConsole console, IRecipeService service)
+public class ImportPage(IAnsiConsole console, IRecipeService service)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
@@ -20,11 +20,11 @@ public class ImportMenu(IAnsiConsole console, IRecipeService service)
         }
         catch (FormatException)
         {
-            new ErrorMessage(Console, "Не удалось десериализовать данные из файла").Show();
+            new ErrorPage(Console, "Не удалось десериализовать данные из файла").Show();
         }
         catch (IOException)
         {
-            new ErrorMessage(Console, "Ошибка при чтении файла").Show();
+            new ErrorPage(Console, "Ошибка при чтении файла").Show();
         }
     }
 }

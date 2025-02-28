@@ -2,9 +2,9 @@
 using Contracts;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Pages;
 
-public class ExportMenu(IAnsiConsole console, IRecipeService service)
+public class ExportPage(IAnsiConsole console, IRecipeService service)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
@@ -20,7 +20,7 @@ public class ExportMenu(IAnsiConsole console, IRecipeService service)
         }
         catch (IOException)
         {
-            new ErrorMessage(Console, "Ошибка при записи в файл").Show();
+            new ErrorPage(Console, "Ошибка при записи в файл").Show();
         }
     }
 }

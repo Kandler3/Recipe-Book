@@ -1,9 +1,9 @@
 ﻿using ConsoleUI.Widgets;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Pages;
 
-public class ErrorMessage(IAnsiConsole console, string message)
+public class ErrorPage(IAnsiConsole console, string message)
 {
     private IAnsiConsole Console { get; } = console;
     private string Message { get; } = message;
