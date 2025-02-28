@@ -14,6 +14,13 @@ public class ExportMenu(IAnsiConsole console, IRecipeService service)
         Console.Clear();
         FileFormat format = new SelectFormatPrompt(Console, "Выберите формат импортируемого файла").Ask();
         string filepath = new FilepathPrompt(Console, "Введите путь до файла", false, format).Ask();
-        Service.Export(filepath, format);
+        try
+        {
+            Service.Export(filepath, format);
+        }
+        catch (IOException)
+        {
+            new ErrorMessage(Console, "Ошибка при записи в файл").Show();
+        }
     }
 }

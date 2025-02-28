@@ -93,9 +93,15 @@ public class TxtRecipeSerializer : IRecipeSerializer
             }
             
             if (title != null)
-                currentField += 1;
+                do
+                {
+                    currentField++;
+                    if (currentField > Field.Images)
+                        throw new FormatException("Invalid file format");
+                    
+                } while (!line.StartsWith(FieldNames[currentField]));
             
-            if (!line.StartsWith(FieldNames[currentField]))
+            else if (!line.StartsWith(FieldNames[currentField]))
                 throw new FormatException("Invalid file format");
             
             try
