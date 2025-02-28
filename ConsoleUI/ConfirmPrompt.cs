@@ -7,11 +7,11 @@ public class ConfirmPrompt(IAnsiConsole console, string message)
     private IAnsiConsole Console { get; } = console;
     private string Message { get; } = message;
 
-    private SelectionPrompt<bool> Prompt => new SelectionPrompt<bool>().Title(Message).AddChoices(true, false);
+    private SelectionPrompt<string> Prompt => new SelectionPrompt<string>().Title(Message).AddChoices("Да", "Нет");
 
     public bool Ask()
     {
         Console.Clear();
-        return Console.Prompt(Prompt);
+        return Console.Prompt(Prompt).Equals("Да");
     }
 }

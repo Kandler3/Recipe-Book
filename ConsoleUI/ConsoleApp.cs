@@ -1,5 +1,5 @@
 ﻿using System.Data.SqlTypes;
-using Interfaces;
+using Contracts;
 using Spectre.Console;
 
 namespace ConsoleUI;

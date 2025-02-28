@@ -1,4 +1,6 @@
 ﻿using ConsoleUI;
+using Contracts;
+using Serializers;
 using Services;
 using Spectre.Console;
 
@@ -15,7 +17,16 @@ public static class Program
 
     public static void Main()
     {
-        var app = new ConsoleApp(AnsiConsole.Console, new MockRecipeService());
+        IRecipeSerializer txtSerializer = new TxtSerializer();
+        IRecipeSerializer jsonSerializer = new MockSerializer();
+        IRecipeSerializer csvSerializer = new MockSerializer();
+
+        IRecipeService service = new RecipeService(
+            txtSerializer,
+            jsonSerializer,
+            csvSerializer
+        );
+        var app = new ConsoleApp(AnsiConsole.Console, service);
         app.Run();
     }
     public static void Test()

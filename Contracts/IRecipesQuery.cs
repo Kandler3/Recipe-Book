@@ -1,12 +1,10 @@
-﻿using Models;
-
-namespace Interfaces;
+﻿namespace Contracts;
 
 public interface IRecipesQuery
 {
     public string? TitleSearchQuery { get; }
     public IEnumerable<string>? Categories { get; }
-    public IEnumerable<Ingridient>? Ingridients { get; }
-    public string? SortingParameter { get; }
+    public IEnumerable<string>? Ingredients { get; }
+    public RecipeSortingParameter? SortingParameter { get; }
     public bool? AscendingSorting { get; }
 }
