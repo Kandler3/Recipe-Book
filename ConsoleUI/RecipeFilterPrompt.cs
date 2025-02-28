@@ -70,7 +70,7 @@ public class RecipeFilterPrompt(IAnsiConsole console, IRecipeService service, Re
         var prompt =
             new MultiSelectionPrompt<string>()
                 .NotRequired()
-                .Title("Выберите ингридиенты")
+                .Title("Выберите ингредиенты")
                 .AddChoices(Service.GetIngredients());
 
         foreach (string ingredient in Query.IngredientsList)

@@ -10,7 +10,7 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
 
-    private Text Header { get; } = new Text(
+    private Text Header { get; } = new(
         "Рецепт дня!\n",
         new Style(
             foreground: ConsoleColor.Magenta,
@@ -19,15 +19,12 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
         )
     );
 
-    private Text NoRecipesText { get; } = new Text(
-        "Нет доступных рецептов((",
+    private Text NoRecipesText { get; } = new(
+        "Нет доступных рецептов((\n",
         new Style(foreground: ConsoleColor.DarkGray)
     );
 
-    private Text ReturnText { get; } = new Text(
-        "\n\nЧтобы вернуться нажмите Backspace",
-        style: new Style(foreground: ConsoleColor.DarkGray)
-    );
+    private HintText ReturnText { get; } = new("Чтобы вернуться нажмите Backspace");
 
     public void Show()
     {

@@ -13,19 +13,28 @@ public class RecipeSortingPrompt(IAnsiConsole console, RecipesQuery query)
     {
         Console.Clear();
         
-        string field = Console.Prompt(
+        string choice = Console.Prompt(
             new SelectionPrompt<string>()
                 .Title("Выберите поле для сортировки")
-                .AddChoices("Название", "Категория")
+                .AddChoices("Название", "Категория", "Сбросить", "Назад")
         );
-        
-        Query.SortingParameter = field switch
+
+        switch (choice)
         {
-            "Название" => RecipeSortingParameter.Title,
-            "Категория" => RecipeSortingParameter.Category,
-            _ => throw new ArgumentException(),
-        };
+            case "Название": Query.SortingParameter = RecipeSortingParameter.Title; break;
+            case "Категория": Query.SortingParameter = RecipeSortingParameter.Category; break;
+            case "Сбросить": ShowResetPrompt(); return;
+            case "Назад": return;
+            default: return;
+        }
 
         Query.AscendingSorting = new ConfirmPrompt(Console, "Сортировать по возрастанию?").Ask();
+    }
+
+    private void ShowResetPrompt()
+    {
+        Console.Clear();
+        if (new ConfirmPrompt(Console, "Сбросить настройки сортировки?").Ask())
+            Query.ResetSorting();
     }
 }
