@@ -3,12 +3,12 @@ using Spectre.Console;
 
 namespace ConsoleUI.Prompts;
 
-public class FilepathPrompt(IAnsiConsole console, string message, bool existingFile, FileFormat format)
+public class FilepathPrompt(IAnsiConsole console, string message, bool existingFile, FileFormat? format = null)
 {
     private IAnsiConsole Console { get; } = console;
     private string Message { get; } = message;
     private bool ExistingFile { get; } = existingFile;
-    private FileFormat Format { get; } = format;
+    private FileFormat? Format { get; } = format;
 
     public string Ask()
     {
@@ -30,7 +30,7 @@ public class FilepathPrompt(IAnsiConsole console, string message, bool existingF
 
     private bool IsValidPath(string path, out string message)
     {
-        if (!path.EndsWith(Utils.GetFileFormatPostfix(Format)))
+        if (Format != null && !path.EndsWith(Utils.GetFileFormatPostfix(Format.Value)))
         {
             message = "Неверный формат файла";
             return false;

@@ -1,4 +1,5 @@
 ﻿using Models;
+using SixLabors.ImageSharp;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
@@ -6,16 +7,23 @@ namespace ConsoleUI.Widgets;
 
 public class RecipePanel: IRenderable
 {
-    private Tree Tree { get; set; }
+    private Layout RecipeLayout { get; }
     public RecipePanel(Recipe recipe)
     {
-        Tree = new Tree(new Text(recipe.Title, style: new Style(decoration: Decoration.Bold)));
+        RecipeLayout = new Layout().SplitColumns(new Layout("Tree"), new Layout("Images"));
+        RecipeLayout["Tree"].Update(GenerateTree(recipe));
+        RecipeLayout["Images"].Update(GenerateImagesColumn(recipe));
+    }
+
+    private static Tree GenerateTree(Recipe recipe)
+    {
+        var tree = new Tree(new Text(recipe.Title, style: new Style(decoration: Decoration.Bold)));
         if (recipe.Category != null)
-            Tree.AddNode(new Text($"Категория: {recipe.Category}"));
+            tree.AddNode(new Text($"Категория: {recipe.Category}"));
 
         if (recipe.Ingredients != null)
         {
-            var ingredients = Tree.AddNode("Ингридиенты");
+            var ingredients = tree.AddNode("Ингридиенты");
             foreach (var ingredient in recipe.Ingredients)
             {
                 if (ingredient.Quantity == null)
@@ -30,15 +38,38 @@ public class RecipePanel: IRenderable
 
         if (recipe.Instructions != null)
         {
-            var instructions = Tree.AddNode("Инструкция");
+            var instructions = tree.AddNode("Инструкция");
             foreach (var instruction in recipe.Instructions)
                 instructions.AddNode(instruction);
         }
+
+        return tree;
+    }
+
+    private static Columns GenerateImagesColumn(Recipe recipe)
+    {
+        if (recipe.Images == null)
+            return new Columns().Collapse();
+
+        List<IRenderable> images = [];
+        foreach (string path in recipe.Images)
+        {
+            try
+            {
+                images.Add(new CanvasImage(path).MaxWidth(30));
+            }
+            catch (Exception e) when (e is ImageFormatException or NotSupportedException)
+            {
+                images.Add(new Text($"Не удалось загрузить изображение {path}"));
+            }
+        }
+        
+        return new Columns(images).Collapse();
     }
 
     public Measurement Measure(RenderOptions options, int maxWidth) =>
-        ((IRenderable)Tree).Measure(options, maxWidth);
+        ((IRenderable)RecipeLayout).Measure(options, maxWidth);
 
     public IEnumerable<Segment> Render(RenderOptions options, int maxWidth) => 
-        ((IRenderable)Tree).Render(options, maxWidth);
+        ((IRenderable)RecipeLayout).Render(options, maxWidth);
 }

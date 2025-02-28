@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using System.Net.Mime;
+using Contracts;
 using Models;
 
 namespace Services;
@@ -79,6 +80,8 @@ public class RecipeService : IRecipeService
 
     public void AddRecipeImage(Recipe recipe, string imagePath)
     {
+        recipe.Images ??= [];
+        recipe.Images.Add(imagePath);
     }
 
     public void Import(string filepath, FileFormat format)

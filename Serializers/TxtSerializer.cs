@@ -11,6 +11,7 @@ public class TxtSerializer : IRecipeSerializer
         Category,
         Ingredients,
         Instruction,
+        Images
     }
 
     private Dictionary<Field, string> FieldNames { get; } = new
@@ -19,6 +20,7 @@ public class TxtSerializer : IRecipeSerializer
         new KeyValuePair<Field, string>(Field.Category, "Категория:"),
         new KeyValuePair<Field, string>(Field.Ingredients, "Ингредиенты:"),
         new KeyValuePair<Field, string>(Field.Instruction, "Инструкция:"),
+        new KeyValuePair<Field, string>(Field.Images, "Изображения:")
     ]);
 
     public IEnumerable<Recipe> Deserialize(string filepath)
@@ -50,6 +52,7 @@ public class TxtSerializer : IRecipeSerializer
         string? category = null;
         List<Ingredient> ingredients = [];
         List<string> instruction = [];
+        List<string> images = [];
         
         Field currentField = Field.Title;
         
@@ -76,6 +79,10 @@ public class TxtSerializer : IRecipeSerializer
 
                     case Field.Instruction:
                         instruction.Add(line.TrimStart('-').Trim());
+                        break;
+                    
+                    case Field.Images:
+                        images.Add(line.TrimStart('-').Trim());
                         break;
 
                     default: throw new FormatException("Invalid file format");
@@ -125,7 +132,8 @@ public class TxtSerializer : IRecipeSerializer
             title, 
             category, 
             ingredients.Count != 0 ? ingredients : null, 
-            instruction.Count != 0 ? instruction : null
+            instruction.Count != 0 ? instruction : null,
+            images.Count != 0 ? images : null
         );
     }
 
@@ -167,11 +175,19 @@ public class TxtSerializer : IRecipeSerializer
             foreach (Ingredient ingredient in recipe.Ingredients)
                 writer.WriteLine($"- {SerializeIngredient(ingredient)}");
         }
-        
-        writer.WriteLine($"{FieldNames[Field.Instruction]}");
+
         if (recipe.Instructions != null)
+        {
+            writer.WriteLine($"{FieldNames[Field.Instruction]}");
             foreach (string instruction in recipe.Instructions)
                 writer.WriteLine($"- {instruction}");
+        }
+        if (recipe.Images != null)
+        {
+            writer.WriteLine($"{FieldNames[Field.Images]}");
+            foreach (string image in recipe.Images)
+                writer.WriteLine($"- {image}");
+        }
     }
 
     private string SerializeIngredient(Ingredient ingredient)

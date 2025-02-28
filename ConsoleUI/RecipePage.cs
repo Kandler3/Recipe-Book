@@ -1,12 +1,15 @@
-﻿using ConsoleUI.Widgets;
+﻿using ConsoleUI.Prompts;
+using ConsoleUI.Widgets;
+using Contracts;
 using Models;
 using Spectre.Console;
 
 namespace ConsoleUI;
 
-public class RecipePage(IAnsiConsole console, Recipe recipe)
+public class RecipePage(IAnsiConsole console, IRecipeService service,Recipe recipe)
 {
     private IAnsiConsole Console { get; } = console;
+    private IRecipeService Service { get; } = service;
     private Recipe PanelRecipe { get; } = recipe;
 
     public void Show()
@@ -14,13 +17,22 @@ public class RecipePage(IAnsiConsole console, Recipe recipe)
         
         Console.Clear();
         Console.Write(new RecipePanel(PanelRecipe));
-        Console.Write(new Text("\n\nЧтобы вернуться нажмите Backspace", style: new Style(foreground: ConsoleColor.Gray)));
-        Console.Cursor.Show(false);
 
-        ConsoleKey key;
-        do
+        string option = Console.Prompt(
+            new SelectionPrompt<string>()
+                .AddChoices(
+                    "Добавить изображение",
+                    "Назад"
+                )
+        );
+        if (option.Equals("Добавить изображение"))
         {
-            key = System.Console.ReadKey(true).Key;
-        } while (key != ConsoleKey.Backspace);
+            Service.AddRecipeImage(
+                PanelRecipe, 
+                new FilepathPrompt(Console, "Введите путь до изображения", true).Ask()
+            );
+
+            Show();
+        }
     }
 }

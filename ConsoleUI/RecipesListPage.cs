@@ -51,7 +51,7 @@ public class RecipesListPage
             {
                 case ConsoleKey.Enter: 
                     if (Recipes.Count > 0)
-                        new RecipePage(Console, Recipes[SelectedIndex]).Show();
+                        new RecipePage(Console, RecipeService, Recipes[SelectedIndex]).Show();
                     break;
                 
                 case ConsoleKey.Backspace:
