@@ -1,4 +1,5 @@
-﻿using ConsoleUI.Widgets;
+﻿using ConsoleUI.Prompts;
+using ConsoleUI.Widgets;
 using Contracts;
 using Models;
 using Spectre.Console;

@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using ConsoleUI.Prompts;
+using Contracts;
 using Spectre.Console;
 
 namespace ConsoleUI;

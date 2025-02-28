@@ -1,6 +1,6 @@
 ﻿using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Prompts;
 
 public class ConfirmPrompt(IAnsiConsole console, string message)
 {

@@ -1,7 +1,7 @@
 ﻿using Contracts;
 using Spectre.Console;
 
-namespace ConsoleUI;
+namespace ConsoleUI.Prompts;
 
 public class FilepathPrompt(IAnsiConsole console, string message, bool existingFile, FileFormat format)
 {
