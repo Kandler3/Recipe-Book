@@ -12,16 +12,19 @@ public class RecipeService : IRecipeService
     private IRecipeSerializer TxtSerializer { get; }
     private IRecipeSerializer JsonSerializer { get; }
     private IRecipeSerializer CsvSerializer { get; }
+    private YandexDiskService DiskService { get; }
 
     public RecipeService(
         IRecipeSerializer txtSerializer, 
         IRecipeSerializer jsonSerializer,
-        IRecipeSerializer csvSerializer
+        IRecipeSerializer csvSerializer,
+        YandexDiskService yandexDiskService
     )
     {
         TxtSerializer = txtSerializer;
         JsonSerializer = jsonSerializer;
         CsvSerializer = csvSerializer;
+        DiskService = yandexDiskService;
     }
     public IList<Recipe> GetRecipes(IRecipesQuery query)
     {
@@ -65,8 +68,8 @@ public class RecipeService : IRecipeService
         Recipes.Where(recipe => recipe.Ingredients != null)
             .SelectMany(
                 recipe => 
-                    recipe.Ingredients
-                        .Select(ingredient => ingredient.Name)
+                    recipe.Ingredients?
+                        .Select(ingredient => ingredient.Name) ?? []
             )
             .Distinct();
 
@@ -99,6 +102,18 @@ public class RecipeService : IRecipeService
         );
     }
 
+    public void Import(string filepath, FileFormat format, bool local)
+    {
+        if (local)
+        {
+            Import(filepath, format);
+            return;
+        }
+        DiskService.DownloadFile(".temp", filepath);
+        Import(".temp", format);
+        File.Delete(".temp");
+    }
+
     public void Export(string filepath, FileFormat format, IRecipesQuery? query = null)
     {
         if (query != null)
@@ -111,5 +126,18 @@ public class RecipeService : IRecipeService
             case FileFormat.Json: JsonSerializer.FileSerialize(Recipes, filepath); break;
             default: throw new ArgumentException("Invalid file format");
         }
+    }
+
+    public void Export(string filepath, FileFormat format, IRecipesQuery? query, bool local)
+    {
+        if (local)
+        {
+            Export(filepath, format, query);
+            return;
+        }
+        
+        Export(".temp", format, query);
+        DiskService.UploadFile(".temp", filepath);
+        File.Delete(".temp");
     }
 }

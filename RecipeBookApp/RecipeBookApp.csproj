@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="dotenv.net" Version="3.2.1" />
       <PackageReference Include="Spectre.Console" Version="0.49.2-preview.0.76" />
     </ItemGroup>
 

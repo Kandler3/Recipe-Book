@@ -1,7 +1,6 @@
-﻿using System.Text.Json;
-using ConsoleUI;
-using Contracts;
+﻿using ConsoleUI;
 using Contracts.Interfaces;
+using dotenv.net;
 using Serializers;
 using Services;
 using Spectre.Console;
@@ -22,17 +21,21 @@ public static class Program
         IRecipeSerializer txtSerializer = new TxtRecipeSerializer();
         IRecipeSerializer jsonSerializer = new JsonRecipeSerializer(false);
         IRecipeSerializer csvSerializer = new CsvRecipeSerializer();
+        
+        var envs = DotEnv.Read();
+        YandexDiskService yandexDiskService = new(envs["YANDEX_DISK_CLIENT_ID"], ".env");
 
         IRecipeService recipeService = new RecipeService(
             txtSerializer,
             jsonSerializer,
-            csvSerializer
+            csvSerializer,
+            yandexDiskService
         );
 
         IIngredientSerializer ingredientSerializer = new TxtIngredientSerializer();
         
         IShoppingListService shoppingListService = new ShoppingListService(ingredientSerializer);
-        var app = new ConsoleApp(AnsiConsole.Console, recipeService, shoppingListService);
+        var app = new ConsoleApp(AnsiConsole.Console, recipeService, shoppingListService, yandexDiskService);
         app.Run();
     }
     public static void Test()

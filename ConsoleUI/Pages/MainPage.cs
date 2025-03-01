@@ -6,12 +6,19 @@ using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
-public class MainPage(IAnsiConsole console, IRecipeService recipeService, IShoppingListService shoppingListService, Action onReturn)
+public class MainPage(
+    IAnsiConsole console, 
+    IRecipeService recipeService, 
+    IShoppingListService shoppingListService, 
+    IYandexDiskService yandexDiskService,
+    Action onReturn
+)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService RecipeService { get; } = recipeService;
     private RecipesQuery RecipesQuery { get; } = new();
     private IShoppingListService ShoppingListService { get; } = shoppingListService;
+    private IYandexDiskService YandexDiskService { get; } = yandexDiskService;
     private Action OnReturn { get; } = onReturn;
 
     private SelectionPrompt<MenuOption> MenuSelectionPrompt => new SelectionPrompt<MenuOption>()
@@ -35,7 +42,7 @@ public class MainPage(IAnsiConsole console, IRecipeService recipeService, IShopp
 
     private void OnImport()
     {
-        new ImportPage(Console, RecipeService).Show();
+        new ImportPage(Console, RecipeService, YandexDiskService).Show();
     }
 
     private void OnExport()
