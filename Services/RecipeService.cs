@@ -1,5 +1,7 @@
 ﻿using System.Net.Mime;
 using Contracts;
+using Contracts.Enums;
+using Contracts.Interfaces;
 using Models;
 
 namespace Services;
@@ -89,9 +91,9 @@ public class RecipeService : IRecipeService
         Recipes.AddRange(
             format switch
             {
-                FileFormat.Txt => TxtSerializer.Deserialize(filepath),
-                FileFormat.Json => JsonSerializer.Deserialize(filepath),
-                FileFormat.Csv => CsvSerializer.Deserialize(filepath),
+                FileFormat.Txt => TxtSerializer.FileDeserialize(filepath),
+                FileFormat.Json => JsonSerializer.FileDeserialize(filepath),
+                FileFormat.Csv => CsvSerializer.FileDeserialize(filepath),
                 _ => throw new ArgumentException("Invalid file format"),
             }
         );
@@ -104,9 +106,9 @@ public class RecipeService : IRecipeService
             
         switch (format)
         {
-            case FileFormat.Txt: TxtSerializer.Serialize(Recipes, filepath); break;
-            case FileFormat.Csv: CsvSerializer.Serialize(Recipes, filepath); break;
-            case FileFormat.Json: JsonSerializer.Serialize(Recipes, filepath); break;
+            case FileFormat.Txt: TxtSerializer.FileSerialize(Recipes, filepath); break;
+            case FileFormat.Csv: CsvSerializer.FileSerialize(Recipes, filepath); break;
+            case FileFormat.Json: JsonSerializer.FileSerialize(Recipes, filepath); break;
             default: throw new ArgumentException("Invalid file format");
         }
     }

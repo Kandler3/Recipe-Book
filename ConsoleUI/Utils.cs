@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Contracts.Enums;
 using Models;
 using Spectre.Console;
 using Spectre.Console.Rendering;

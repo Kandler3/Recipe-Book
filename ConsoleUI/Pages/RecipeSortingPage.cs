@@ -1,5 +1,6 @@
 ﻿using ConsoleUI.Prompts;
 using Contracts;
+using Contracts.Enums;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;

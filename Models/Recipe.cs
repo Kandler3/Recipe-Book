@@ -14,4 +14,6 @@ public class Recipe(
     public List<string>? Instructions { get; set; } = instructions;
     public List<string>? Images { get; set; } = images;
     public Recipe() : this("no-title") {}
+    
+    public override string ToString() => Title;
 }

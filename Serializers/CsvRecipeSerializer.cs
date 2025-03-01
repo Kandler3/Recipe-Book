@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Contracts;
+using Contracts.Interfaces;
 using CsvHelper;
 using Models;
 
@@ -7,7 +8,7 @@ namespace Serializers;
 
 public class CsvRecipeSerializer : IRecipeSerializer
 {
-    public void Serialize(IEnumerable<Recipe> recipes, string outputFilepath)
+    public void FileSerialize(IEnumerable<Recipe> recipes, string outputFilepath)
     {
         using StreamWriter streamWriter = new(outputFilepath);
         using CsvWriter writer = new(streamWriter, CultureInfo.InvariantCulture);
@@ -15,7 +16,7 @@ public class CsvRecipeSerializer : IRecipeSerializer
         writer.WriteRecords(recipes);
     }
 
-    public IEnumerable<Recipe> Deserialize(string inputFilepath)
+    public IEnumerable<Recipe> FileDeserialize(string inputFilepath)
     {
         using StreamReader streamReader = new(inputFilepath);
         using CsvReader reader = new(streamReader, CultureInfo.InvariantCulture);

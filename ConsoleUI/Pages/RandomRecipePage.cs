@@ -1,5 +1,6 @@
 ﻿using ConsoleUI.Widgets;
 using Contracts;
+using Contracts.Interfaces;
 using Models;
 using Spectre.Console;
 

@@ -1,10 +1,12 @@
 ﻿using Contracts;
+using Contracts.Interfaces;
 using Models;
 
 namespace Serializers;
 
 public class TxtRecipeSerializer : IRecipeSerializer
 {
+    private TxtIngredientSerializer IngredientSerializer { get; } = new();
     private enum Field
     {
         Title,
@@ -23,7 +25,7 @@ public class TxtRecipeSerializer : IRecipeSerializer
         new KeyValuePair<Field, string>(Field.Images, "Изображения:")
     ]);
 
-    public IEnumerable<Recipe> Deserialize(string filepath)
+    public IEnumerable<Recipe> FileDeserialize(string filepath)
     {
         List<Recipe> res = [];
         using var reader = new StreamReader(filepath);
@@ -36,7 +38,7 @@ public class TxtRecipeSerializer : IRecipeSerializer
         return res;
     }
 
-    public void Serialize(IEnumerable<Recipe> recipes, string filepath)
+    public void FileSerialize(IEnumerable<Recipe> recipes, string filepath)
     {
         using var writer = new StreamWriter(filepath);
         foreach (Recipe recipe in recipes)
@@ -74,7 +76,7 @@ public class TxtRecipeSerializer : IRecipeSerializer
                 switch (currentField)
                 {
                     case Field.Ingredients:
-                        ingredients.Add(DeserializeIngredient(line.TrimStart('-').Trim()));
+                        ingredients.Add(IngredientSerializer.Deserialize(line.TrimStart('-').Trim()));
                         break;
 
                     case Field.Instruction:
@@ -143,23 +145,6 @@ public class TxtRecipeSerializer : IRecipeSerializer
         );
     }
 
-    private Ingredient DeserializeIngredient(string txtString)
-    {
-        string[] args = txtString.Split(" - ", 2, StringSplitOptions.TrimEntries);
-        string name = args[0];
-        
-        if (args.Length == 1)
-            return new Ingredient(name);
-        
-        string[] quantityArgs = args[1].Split(' ', 2, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        
-        if (!int.TryParse(quantityArgs[0], out int quantity) || quantity <= 0)
-            throw new FormatException("Ingredient quantity must be an integer greater than 0");
-        
-        string? measurement = quantityArgs.Length > 1 ? quantityArgs[1] : null;
-        return new Ingredient(name, quantity, measurement);
-    }
-
     private static string GetContent(string line)
     {
         string res = line[(line.IndexOf(':') + 1)..].Trim();
@@ -179,7 +164,7 @@ public class TxtRecipeSerializer : IRecipeSerializer
         {
             writer.WriteLine($"{FieldNames[Field.Ingredients]}");
             foreach (Ingredient ingredient in recipe.Ingredients)
-                writer.WriteLine($"- {SerializeIngredient(ingredient)}");
+                writer.WriteLine($"- {IngredientSerializer.Serialize(ingredient)}");
         }
 
         if (recipe.Instructions != null)
@@ -194,18 +179,5 @@ public class TxtRecipeSerializer : IRecipeSerializer
             foreach (string image in recipe.Images)
                 writer.WriteLine($"- {image}");
         }
-    }
-
-    private string SerializeIngredient(Ingredient ingredient)
-    {
-        string res = ingredient.Name;
-        
-        if (ingredient.Quantity != null)
-            res += $" - {ingredient.Quantity}";
-        
-        if (ingredient.Measurement != null)
-            res += $" {ingredient.Measurement}";
-        
-        return res;
     }
 }

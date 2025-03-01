@@ -1,9 +1,9 @@
 ﻿using Models;
 
-namespace Contracts;
+namespace Contracts.Interfaces;
 
 public interface IRecipeSerializer
 {
-    public IEnumerable<Recipe> Deserialize(string inputFilepath);
-    public void Serialize(IEnumerable<Recipe> recipes, string outputFilepath);
+    public IEnumerable<Recipe> FileDeserialize(string inputFilepath);
+    public void FileSerialize(IEnumerable<Recipe> recipes, string outputFilepath);
 }

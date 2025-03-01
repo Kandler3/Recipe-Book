@@ -1,0 +1,29 @@
+﻿using Contracts;
+using Contracts.Interfaces;
+using Models;
+using Spectre.Console;
+
+namespace ConsoleUI.Pages;
+
+public class GenerateShoppingListPage(
+    IAnsiConsole console, 
+    IRecipeService recipeService, 
+    RecipesQuery query, 
+    IShoppingListService shoppingListService
+)
+{
+    private IAnsiConsole Console { get; } = console;
+    private IRecipeService RecipeService { get; } = recipeService;
+    private RecipesQuery Query { get; } = query;
+    private IShoppingListService ShoppingListService { get; } = shoppingListService;
+
+    public void Show()
+    {
+        Console.Clear();
+        var recipes = Console.Prompt(
+            new MultiSelectionPrompt<Recipe>().AddChoices(RecipeService.GetRecipes(Query))
+        );
+        var shoppingList = ShoppingListService.GenerateShoppingList(recipes);
+        new ShoppingListPage(Console, ShoppingListService, shoppingList).Show();
+    }
+}

@@ -1,16 +1,17 @@
 ﻿using Contracts;
+using Contracts.Interfaces;
 using Models;
 
 namespace Serializers;
 
 public class MockSerializer : IRecipeSerializer
 {
-    public void Serialize(IEnumerable<Recipe> recipes, string outputFilepath)
+    public void FileSerialize(IEnumerable<Recipe> recipes, string outputFilepath)
     {
         
     }
 
-    public IEnumerable<Recipe> Deserialize(string inputFilepath)
+    public IEnumerable<Recipe> FileDeserialize(string inputFilepath)
     {
         return [];
     }

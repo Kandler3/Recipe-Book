@@ -1,15 +1,17 @@
 ﻿using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
 using Contracts;
+using Contracts.Interfaces;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
-public class MainPage(IAnsiConsole console, IRecipeService recipeService, Action onReturn)
+public class MainPage(IAnsiConsole console, IRecipeService recipeService, IShoppingListService shoppingListService, Action onReturn)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService RecipeService { get; } = recipeService;
-    private RecipesQuery RecipesQuery { get; } = new RecipesQuery();
+    private RecipesQuery RecipesQuery { get; } = new();
+    private IShoppingListService ShoppingListService { get; } = shoppingListService;
     private Action OnReturn { get; } = onReturn;
 
     private SelectionPrompt<MenuOption> MenuSelectionPrompt => new SelectionPrompt<MenuOption>()
@@ -21,6 +23,7 @@ public class MainPage(IAnsiConsole console, IRecipeService recipeService, Action
             new MenuOption("Фильтр", OnAddFilter),
             new MenuOption("Сортировка", OnAddSort),
             new MenuOption("Добавить рецепт", OnAddRecipe),
+            new MenuOption("Сгенерировать список покупок", OnGenerateShoppingList),
             new MenuOption("Рецепт дня", OnShowRandomRecipe),
             new MenuOption("Выйти", OnExit)
         );
@@ -53,6 +56,11 @@ public class MainPage(IAnsiConsole console, IRecipeService recipeService, Action
     private void OnAddRecipe()
     {
         new AddRecipePage(Console, RecipeService).Show();
+    }
+
+    private void OnGenerateShoppingList()
+    {
+        new GenerateShoppingListPage(Console, RecipeService, RecipesQuery, ShoppingListService).Show();
     }
 
     private void OnShowRandomRecipe()

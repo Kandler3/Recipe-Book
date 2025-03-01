@@ -1,4 +1,4 @@
-﻿namespace Contracts;
+﻿namespace Contracts.Enums;
 
 public enum FileFormat
 {

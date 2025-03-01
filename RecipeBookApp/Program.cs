@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using ConsoleUI;
 using Contracts;
+using Contracts.Interfaces;
 using Serializers;
 using Services;
 using Spectre.Console;
@@ -22,12 +23,16 @@ public static class Program
         IRecipeSerializer jsonSerializer = new JsonRecipeSerializer(false);
         IRecipeSerializer csvSerializer = new CsvRecipeSerializer();
 
-        IRecipeService service = new RecipeService(
+        IRecipeService recipeService = new RecipeService(
             txtSerializer,
             jsonSerializer,
             csvSerializer
         );
-        var app = new ConsoleApp(AnsiConsole.Console, service);
+
+        IIngredientSerializer ingredientSerializer = new TxtIngredientSerializer();
+        
+        IShoppingListService shoppingListService = new ShoppingListService(ingredientSerializer);
+        var app = new ConsoleApp(AnsiConsole.Console, recipeService, shoppingListService);
         app.Run();
     }
     public static void Test()

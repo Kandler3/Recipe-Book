@@ -14,7 +14,6 @@
       <ProjectReference Include="..\Models\Models.csproj" />
       <ProjectReference Include="..\RecipeGenerator\RecipeGenerator.csproj" />
       <ProjectReference Include="..\Serializers\Serializers.csproj" />
-      <ProjectReference Include="..\ShoppingListGenerator\ShoppingListGenerator.csproj" />
     </ItemGroup>
 
     <ItemGroup>

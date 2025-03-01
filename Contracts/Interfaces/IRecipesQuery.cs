@@ -1,4 +1,6 @@
-﻿namespace Contracts;
+﻿using Contracts.Enums;
+
+namespace Contracts.Interfaces;
 
 public interface IRecipesQuery
 {

@@ -1,6 +1,7 @@
-﻿using Models;
+﻿using Contracts.Enums;
+using Models;
 
-namespace Contracts;
+namespace Contracts.Interfaces;
 
 public interface IRecipeService
 {
