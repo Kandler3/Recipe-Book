@@ -1,4 +1,5 @@
-﻿using ConsoleUI.Prompts;
+﻿using System.Security.Authentication;
+using ConsoleUI.Prompts;
 using Contracts;
 using Contracts.Enums;
 using Contracts.Interfaces;
@@ -20,7 +21,7 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
         ) == "Этот компьютер";
         
         FileFormat format = new SelectFormatPrompt(Console, "Выберите формат импортируемого файла").Ask();
-        string filepath = new FilepathPrompt(Console, "Введите путь до файла", true, format).Ask();
+        string filepath = new FilepathPrompt(Console, "Введите путь до файла", local, format).Ask();
 
         if (!local && DiskService.OAuthToken == null)
         {
@@ -28,6 +29,7 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
             DiskService.OAuthToken =
                 Console.Prompt(new TextPrompt<string>("Авторизуйтесь в браузере и введите токен: "));
         }
+
         try
         {
             Service.Import(filepath, format, local);
@@ -39,6 +41,15 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
         catch (IOException)
         {
             new ErrorPage(Console, "Ошибка при чтении файла").Show();
+        }
+        catch (AuthenticationException) when (!local)
+        {
+            DiskService.OAuthToken = null;
+            new ErrorPage(Console, "Ошибка авторизации я Яндекс Диск").Show();
+        }
+        catch (InvalidOperationException) when (!local)
+        {
+            new ErrorPage(Console, "Ошибка при работе с Яндекс Диском").Show();
         }
     }
 }

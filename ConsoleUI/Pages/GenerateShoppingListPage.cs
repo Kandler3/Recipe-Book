@@ -20,10 +20,17 @@ public class GenerateShoppingListPage(
     public void Show()
     {
         Console.Clear();
-        var recipes = Console.Prompt(
-            new MultiSelectionPrompt<Recipe>().AddChoices(RecipeService.GetRecipes(Query))
+        var recipes = RecipeService.GetRecipes(Query);
+        if (recipes.Count == 0)
+        {
+            new ErrorPage(Console, "Нет рецептов").Show();
+            return;
+        }
+        
+        var selectedRecipes = Console.Prompt(
+            new MultiSelectionPrompt<Recipe>().AddChoices(recipes)
         );
-        var shoppingList = ShoppingListService.GenerateShoppingList(recipes);
+        var shoppingList = ShoppingListService.GenerateShoppingList(selectedRecipes);
         new ShoppingListPage(Console, ShoppingListService, shoppingList).Show();
     }
 }

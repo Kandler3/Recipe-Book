@@ -9,18 +9,20 @@ public class ConsoleApp(
     IAnsiConsole console, 
     IRecipeService recipeService, 
     IShoppingListService shoppingListService,
-    IYandexDiskService yandexDiskService
+    IYandexDiskService yandexDiskService,
+    IGigaChatService gigaChatService
 )
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService RecipeService { get; } = recipeService;
     private IShoppingListService ShoppingListService { get; } = shoppingListService;
     private IYandexDiskService YandexDiskService { get; } = yandexDiskService;
+    private IGigaChatService GigaChatService { get; } = gigaChatService;
 
     public void Run()
     {
         bool run = true;
-        MainPage mainPage = new(Console, RecipeService, ShoppingListService, YandexDiskService, () => run = false);
+        MainPage mainPage = new(Console, RecipeService, ShoppingListService, YandexDiskService, GigaChatService, () => run = false);
         while (run)
         {
             mainPage.Show();

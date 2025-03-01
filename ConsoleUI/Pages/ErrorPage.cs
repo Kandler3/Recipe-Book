@@ -11,7 +11,7 @@ public class ErrorPage(IAnsiConsole console, string message)
     public void Show()
     {
         Console.Clear();
-        Console.Write(new Text(Message + "\n", new Style(foreground: ConsoleColor.Red)));
+        Console.Write(new ErrorText(Message + "\n"));
         Console.Write(new HintText("Нажмите на любую кнопку чтобы продолжить"));
 
         System.Console.ReadKey(true);

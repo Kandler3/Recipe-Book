@@ -1,10 +1,11 @@
-﻿using Contracts;
+﻿using System.Text;
+using Contracts;
 using Contracts.Interfaces;
 using Models;
 
 namespace Serializers;
 
-public class TxtRecipeSerializer : IRecipeSerializer
+public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
 {
     private TxtIngredientSerializer IngredientSerializer { get; } = new();
     private enum Field
@@ -29,12 +30,29 @@ public class TxtRecipeSerializer : IRecipeSerializer
     {
         List<Recipe> res = [];
         using var reader = new StreamReader(filepath);
-        Recipe? recipe = DeserializeRecipe(reader);
-        while (recipe != null)
+        StringBuilder sb = new();
+        string? line = reader.ReadLine();
+        while (line != null)
         {
-            res.Add(recipe);
-            recipe = DeserializeRecipe(reader);
+            if (line == "")
+            {
+                if (sb.Length > 0)
+                {
+                    res.Add(DeserializeRecipe(sb.ToString()));
+                    sb.Clear();
+                }
+            }
+            else
+            {
+                sb.Append(line + "\n");
+            }
+            
+            line = reader.ReadLine();
         }
+        
+        if (sb.Length > 0)
+            res.Add(DeserializeRecipe(sb.ToString()));
+        
         return res;
     }
 
@@ -43,12 +61,12 @@ public class TxtRecipeSerializer : IRecipeSerializer
         using var writer = new StreamWriter(filepath);
         foreach (Recipe recipe in recipes)
         {
-            SerializeRecipe(recipe, writer);
+            writer.WriteLine(SerializeRecipe(recipe));
             writer.WriteLine();
         }
     }
 
-    private Recipe? DeserializeRecipe(StreamReader reader)
+    public Recipe DeserializeRecipe(string recipeString)
     {
         string? title = null;
         string? category = null;
@@ -57,19 +75,7 @@ public class TxtRecipeSerializer : IRecipeSerializer
         List<string> images = [];
         
         Field currentField = Field.Title;
-        
-        string? line;
-        do
-        {
-            line = reader.ReadLine()?.Trim();
-        } while (line == "");
-        
-        if (line == null)
-        {
-            return null;
-        }
-        
-        while (!string.IsNullOrEmpty(line))
+        foreach(string line in recipeString.Split("\n", StringSplitOptions.RemoveEmptyEntries))
         {
             if (line.StartsWith('-'))
             {
@@ -89,8 +95,6 @@ public class TxtRecipeSerializer : IRecipeSerializer
 
                     default: throw new FormatException("Invalid file format");
                 }
-                
-                line = reader.ReadLine()?.Trim();
                 continue;
             }
             
@@ -127,8 +131,6 @@ public class TxtRecipeSerializer : IRecipeSerializer
             {
                 throw new FormatException("Invalid file format", e);
             }
-            
-            line = reader.ReadLine()?.Trim();
         }
 
         if (title == null)
@@ -154,30 +156,33 @@ public class TxtRecipeSerializer : IRecipeSerializer
         return res;
     }
 
-    private void SerializeRecipe(Recipe recipe, StreamWriter writer)
+    private string SerializeRecipe(Recipe recipe)
     {
-        writer.WriteLine($"{FieldNames[Field.Title]} {recipe.Title}");
+        StringBuilder sb = new();
+        sb.Append($"{FieldNames[Field.Title]} {recipe.Title}\n");
         if (recipe.Category != null)
-            writer.WriteLine($"{FieldNames[Field.Category]} {recipe.Category}");
+            sb.Append($"{FieldNames[Field.Category]} {recipe.Category}\n");
 
         if (recipe.Ingredients != null)
         {
-            writer.WriteLine($"{FieldNames[Field.Ingredients]}");
+            sb.Append($"{FieldNames[Field.Ingredients]}\n");
             foreach (Ingredient ingredient in recipe.Ingredients)
-                writer.WriteLine($"- {IngredientSerializer.Serialize(ingredient)}");
+                sb.Append($"- {IngredientSerializer.Serialize(ingredient)}\n");
         }
 
         if (recipe.Instructions != null)
         {
-            writer.WriteLine($"{FieldNames[Field.Instruction]}");
+            sb.Append($"{FieldNames[Field.Instruction]}\n");
             foreach (string instruction in recipe.Instructions)
-                writer.WriteLine($"- {instruction}");
+                sb.Append($"- {instruction}\n");
         }
         if (recipe.Images != null)
         {
-            writer.WriteLine($"{FieldNames[Field.Images]}");
+            sb.Append($"{FieldNames[Field.Images]}\n");
             foreach (string image in recipe.Images)
-                writer.WriteLine($"- {image}");
+                sb.Append($"- {image}\n");
         }
+        
+        return sb.ToString();
     }
 }

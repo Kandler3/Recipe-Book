@@ -1,6 +1,5 @@
 ﻿using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
-using Contracts;
 using Contracts.Interfaces;
 using Spectre.Console;
 
@@ -11,6 +10,7 @@ public class MainPage(
     IRecipeService recipeService, 
     IShoppingListService shoppingListService, 
     IYandexDiskService yandexDiskService,
+    IGigaChatService gigaChatService,
     Action onReturn
 )
 {
@@ -19,6 +19,7 @@ public class MainPage(
     private RecipesQuery RecipesQuery { get; } = new();
     private IShoppingListService ShoppingListService { get; } = shoppingListService;
     private IYandexDiskService YandexDiskService { get; } = yandexDiskService;
+    private IGigaChatService GigaChatService { get; } = gigaChatService;
     private Action OnReturn { get; } = onReturn;
 
     private SelectionPrompt<MenuOption> MenuSelectionPrompt => new SelectionPrompt<MenuOption>()
@@ -32,6 +33,7 @@ public class MainPage(
             new MenuOption("Добавить рецепт", OnAddRecipe),
             new MenuOption("Сгенерировать список покупок", OnGenerateShoppingList),
             new MenuOption("Рецепт дня", OnShowRandomRecipe),
+            new MenuOption("Сгенерировать рецепт", OnGenerateRecipe),
             new MenuOption("Выйти", OnExit)
         );
 
@@ -47,7 +49,7 @@ public class MainPage(
 
     private void OnExport()
     {
-        new ExportPage(Console, RecipeService, RecipesQuery).Show();
+        new ExportPage(Console, RecipeService, RecipesQuery, YandexDiskService).Show();
     }
 
     private void OnAddFilter()
@@ -75,10 +77,17 @@ public class MainPage(
         new RandomRecipePage(Console, RecipeService).Show();
     }
 
+    private void OnGenerateRecipe()
+    {
+        new GenerateRecipePage(Console, RecipeService, GigaChatService).Show();
+    }
+
     private void OnExit()
     {
+        YandexDiskService.SaveOAuthToken();
+        
         if (new ConfirmPrompt(Console, "Сохранить данные перед выходом?").Ask())
-            new ExportPage(Console, RecipeService, RecipesQuery).Show();
+            new ExportPage(Console, RecipeService, RecipesQuery, YandexDiskService).Show();
         
         OnReturn();
     }
