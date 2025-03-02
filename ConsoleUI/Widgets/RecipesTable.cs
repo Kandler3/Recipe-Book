@@ -1,11 +1,27 @@
-﻿using Models;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using Models;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
 namespace ConsoleUI.Widgets;
 
+/// <summary>
+/// Таблица для отображения списка рецептов с постраничной навигацией.
+/// </summary>
 public class RecipesTable : IRenderable
 {
+    /// <summary>
+    /// Создает таблицу с рецептами.
+    /// </summary>
+    /// <param name="recipes">Список рецептов для отображения.</param>
+    /// <param name="selected">Индекс выбранного рецепта.</param>
+    /// <param name="page">Номер текущей страницы (начиная с 0).</param>
+    /// <param name="maxPage">Общее количество страниц.</param>
     public RecipesTable(IList<Recipe> recipes, int selected, int page, int maxPage)
     {
         Recipes = recipes;
@@ -31,6 +47,10 @@ public class RecipesTable : IRenderable
         return ((IRenderable)Table).Render(options, maxWidth);
     }
 
+    /// <summary>
+    /// Собирает таблицу с рецептами и навигационной информацией.
+    /// </summary>
+    /// <returns>Построенная таблица.</returns>
     private Table BuildTable()
     {
         Table table = new();
@@ -48,7 +68,8 @@ public class RecipesTable : IRenderable
                 + "Backspace: назад"
             );
 
-        for (var i = 0; i < Recipes.Count; i++) table.AddRow(Utils.GetRowFromRecipe(Recipes[i], i == Selected));
+        for (var i = 0; i < Recipes.Count; i++) 
+            table.AddRow(Utils.GetRowFromRecipe(Recipes[i], i == Selected));
 
         return table;
     }

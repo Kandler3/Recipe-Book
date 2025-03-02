@@ -1,4 +1,10 @@
-﻿using ConsoleUI;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using ConsoleUI;
 using Contracts.Interfaces;
 using dotenv.net;
 using Serializers;
@@ -7,8 +13,14 @@ using Spectre.Console;
 
 namespace App;
 
+/// <summary>
+/// Класс Program, содержащий точку входа в приложение.
+/// </summary>
 public static class Program
 {
+    /// <summary>
+    /// Точка входа в приложение. Инициализирует необходимые сервисы и запускает консольное приложение.
+    /// </summary>
     public static void Main()
     {
         TxtRecipeSerializer txtSerializer = new();

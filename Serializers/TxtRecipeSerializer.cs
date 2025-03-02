@@ -1,9 +1,18 @@
-﻿using System.Text;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using System.Text;
 using Contracts.Interfaces;
 using Models;
 
 namespace Serializers;
 
+/// <summary>
+/// Сериализатор рецептов для работы с текстовыми файлами.
+/// </summary>
 public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
 {
     private TxtIngredientSerializer IngredientSerializer { get; } = new();
@@ -17,6 +26,11 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         new KeyValuePair<Field, string>(Field.Images, "Изображения:")
     ]);
 
+    /// <summary>
+    /// Десериализует рецепты из текстового файла.
+    /// </summary>
+    /// <param name="filepath">Путь к файлу с рецептами.</param>
+    /// <returns>Коллекция рецептов.</returns>
     public IEnumerable<Recipe> FileDeserialize(string filepath)
     {
         List<Recipe> res = [];
@@ -47,6 +61,11 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         return res;
     }
 
+    /// <summary>
+    /// Сериализует коллекцию рецептов и сохраняет их в текстовый файл.
+    /// </summary>
+    /// <param name="recipes">Коллекция рецептов для сериализации.</param>
+    /// <param name="filepath">Путь к файлу для сохранения рецептов.</param>
     public void FileSerialize(IEnumerable<Recipe> recipes, string filepath)
     {
         using var writer = new StreamWriter(filepath);
@@ -57,6 +76,12 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         }
     }
 
+    /// <summary>
+    /// Десериализует рецепт из строкового представления.
+    /// </summary>
+    /// <param name="recipeString">Строковое представление рецепта.</param>
+    /// <returns>Экземпляр рецепта.</returns>
+    /// <exception cref="FormatException">Выбрасывается, если формат файла неверный.</exception>
     public Recipe DeserializeRecipe(string recipeString)
     {
         string? title = null;
@@ -135,6 +160,12 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         );
     }
 
+    /// <summary>
+    /// Извлекает содержимое строки после символа ':'.
+    /// </summary>
+    /// <param name="line">Строка, содержащая название поля и его значение.</param>
+    /// <returns>Содержимое поля.</returns>
+    /// <exception cref="FormatException">Выбрасывается, если содержимое пустое.</exception>
     private static string GetContent(string line)
     {
         var res = line[(line.IndexOf(':') + 1)..].Trim();
@@ -144,6 +175,11 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         return res;
     }
 
+    /// <summary>
+    /// Сериализует рецепт в строковое представление.
+    /// </summary>
+    /// <param name="recipe">Рецепт для сериализации.</param>
+    /// <returns>Строковое представление рецепта.</returns>
     private string SerializeRecipe(Recipe recipe)
     {
         StringBuilder sb = new();

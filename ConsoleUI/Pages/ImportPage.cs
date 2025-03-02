@@ -1,4 +1,10 @@
-﻿using System.Security.Authentication;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using System.Security.Authentication;
 using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
 using Contracts.Interfaces;
@@ -6,12 +12,21 @@ using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
+/// <summary>
+/// Страница импорта рецептов из локального файла или с Яндекс.Диска.
+/// </summary>
+/// <param name="console">Консольный интерфейс для взаимодействия с пользователем.</param>
+/// <param name="service">Сервис для управления рецептами.</param>
+/// <param name="diskService">Сервис для работы с Яндекс.Диском.</param>
 public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDiskService diskService)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
     private IYandexDiskService DiskService { get; } = diskService;
 
+    /// <summary>
+    /// Отображает страницу импорта и выполняет процесс загрузки рецептов.
+    /// </summary>
     public void Show()
     {
         Console.Clear();
@@ -51,7 +66,7 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
         catch (AuthenticationException) when (!local)
         {
             DiskService.OAuthToken = null;
-            new MessagePage(Console, new ErrorText("Ошибка авторизации я Яндекс Диск\n")).Show();
+            new MessagePage(Console, new ErrorText("Ошибка авторизации на Яндекс Диск\n")).Show();
         }
         catch (InvalidOperationException) when (!local)
         {

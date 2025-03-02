@@ -1,4 +1,10 @@
-﻿using ConsoleUI.Prompts;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
 using Contracts.Interfaces;
 using Models;
@@ -6,8 +12,17 @@ using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
+/// <summary>
+/// Страница списка рецептов с возможностью просмотра, удаления и навигации по страницам.
+/// </summary>
 public class RecipesListPage
 {
+    /// <summary>
+    /// Создает страницу списка рецептов.
+    /// </summary>
+    /// <param name="console">Консольный интерфейс для взаимодействия с пользователем.</param>
+    /// <param name="recipeService">Сервис для работы с рецептами.</param>
+    /// <param name="query">Запрос, содержащий параметры фильтрации и сортировки рецептов.</param>
     public RecipesListPage(IAnsiConsole console, IRecipeService recipeService, RecipesQuery query)
     {
         Console = console;
@@ -28,6 +43,9 @@ public class RecipesListPage
     private int MinIndex => CurrentPage * PageSize;
     private int MaxIndex => int.Min((CurrentPage + 1) * PageSize, Recipes.Count);
 
+    /// <summary>
+    /// Отображает список рецептов и обрабатывает пользовательский ввод для навигации и управления.
+    /// </summary>
     public void Show()
     {
         Console.Clear();
@@ -89,6 +107,9 @@ public class RecipesListPage
         } while (run);
     }
 
+    /// <summary>
+    /// Удаляет выбранный рецепт после подтверждения пользователя.
+    /// </summary>
     public void OnDeleteRecipe()
     {
         if (Recipes.Count == 0)

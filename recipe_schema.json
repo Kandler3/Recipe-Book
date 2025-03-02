@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Recipe",
+    "type": "object",
+    "properties": {
+      "Title": { "type": "string" },
+      "Category": { "type": ["string", "null"] },
+      "Ingredients": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "Name": { "type": "string" },
+            "Quantity": { "type": ["integer", "null"] },
+            "Measurement": { "type": ["string", "null"] }
+          },
+          "required": ["Name"],
+          "additionalProperties": false
+        }
+      },
+      "Instructions": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "Images": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["Title"],
+    "additionalProperties": false
+  }

@@ -51,7 +51,7 @@ public class ShoppingListPage(IAnsiConsole console, IShoppingListService service
         }
         catch (IOException)
         {
-            new ErrorPage(Console, "Ошибка при записи в файл").Show();
+            new MessagePage(Console, new ErrorText("Ошибка при записи в файл\n")).Show();
         }
     }
 }

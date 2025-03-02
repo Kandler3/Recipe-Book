@@ -1,9 +1,20 @@
-﻿using ConsoleUI.Widgets;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using ConsoleUI.Widgets;
 using Contracts.Interfaces;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
+/// <summary>
+/// Страница отображения случайного рецепта.
+/// </summary>
+/// <param name="console">Консольный интерфейс для взаимодействия с пользователем.</param>
+/// <param name="service">Сервис для работы с рецептами.</param>
 public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
 {
     private IAnsiConsole Console { get; } = console;
@@ -20,8 +31,11 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
 
     private HintText NoRecipesText { get; } = new("Нет доступных рецептов((\n");
 
-    private HintText ReturnText { get; } = new("Чтобы вернуться нажмите Backspace");
+    private HintText ReturnText { get; } = new("Чтобы вернуться нажмите Backspace\n");
 
+    /// <summary>
+    /// Отображает случайный рецепт из списка доступных рецептов.
+    /// </summary>
     public void Show()
     {
         Console.Clear();
@@ -33,7 +47,6 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
         {
             Console.Write(NoRecipesText);
         }
-
         else
         {
             var random = new Random();

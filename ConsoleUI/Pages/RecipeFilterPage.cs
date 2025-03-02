@@ -1,14 +1,29 @@
-﻿using Contracts.Interfaces;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using Contracts.Interfaces;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
+/// <summary>
+/// Страница настройки фильтрации рецептов.
+/// </summary>
+/// <param name="console">Консольный интерфейс для взаимодействия с пользователем.</param>
+/// <param name="service">Сервис для работы с рецептами.</param>
+/// <param name="query">Объект запроса, содержащий параметры фильтрации.</param>
 public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, RecipesQuery query)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
     private RecipesQuery Query { get; } = query;
 
+    /// <summary>
+    /// Отображает страницу выбора параметров фильтрации.
+    /// </summary>
     public void Show()
     {
         Console.Clear();
@@ -18,7 +33,7 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
                 .AddChoices(
                     "Название",
                     "Категория",
-                    "Ингридиенты",
+                    "Ингредиенты",
                     "Назад"
                 )
         );
@@ -31,7 +46,7 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
             case "Категория":
                 ShowCategoryFilter();
                 break;
-            case "Ингридиенты":
+            case "Ингредиенты":
                 ShowIngredientFilter();
                 break;
             case "Назад": return;
@@ -40,6 +55,9 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
         Show();
     }
 
+    /// <summary>
+    /// Отображает запрос на ввод фильтра по названию.
+    /// </summary>
     private void ShowTitleFilter()
     {
         Console.Clear();
@@ -49,6 +67,9 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
         Query.TitleSearchQuery = query;
     }
 
+    /// <summary>
+    /// Отображает выбор категорий для фильтрации.
+    /// </summary>
     private void ShowCategoryFilter()
     {
         var categories = Service.GetCategories().ToList();
@@ -64,13 +85,17 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
                 .Title("Выберите категории")
                 .AddChoices(categories);
 
-        foreach (var category in Query.CategoriesList) prompt.Select(category);
+        foreach (var category in Query.CategoriesList) 
+            prompt.Select(category);
 
         Console.Clear();
         Query.CategoriesList.Clear();
         Query.CategoriesList.AddRange(Console.Prompt(prompt));
     }
 
+    /// <summary>
+    /// Отображает выбор ингредиентов для фильтрации.
+    /// </summary>
     private void ShowIngredientFilter()
     {
         var ingredients = Service.GetIngredients().ToList();
@@ -86,7 +111,8 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
                 .Title("Выберите ингредиенты")
                 .AddChoices(ingredients);
 
-        foreach (var ingredient in Query.IngredientsList) prompt.Select(ingredient);
+        foreach (var ingredient in Query.IngredientsList) 
+            prompt.Select(ingredient);
 
         Console.Clear();
         Query.IngredientsList.Clear();

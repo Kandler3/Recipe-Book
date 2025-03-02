@@ -1,10 +1,24 @@
-﻿using Contracts.Interfaces;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using Contracts.Interfaces;
 using Models;
 
 namespace Serializers;
 
+/// <summary>
+/// Сериализатор для ингредиентов рецептов в текстовом формате.
+/// </summary>
 public class TxtIngredientSerializer : IIngredientSerializer
 {
+    /// <summary>
+    /// Сериализует коллекцию ингредиентов и сохраняет их в файл.
+    /// </summary>
+    /// <param name="ingredients">Коллекция ингредиентов для сериализации.</param>
+    /// <param name="filePath">Путь к файлу для сохранения результатов.</param>
     public void FileSerialize(IEnumerable<Ingredient> ingredients, string filePath)
     {
         using StreamWriter writer = new(filePath);
@@ -12,6 +26,11 @@ public class TxtIngredientSerializer : IIngredientSerializer
             writer.WriteLine(Serialize(ingredient));
     }
 
+    /// <summary>
+    /// Сериализует один ингредиент в строку.
+    /// </summary>
+    /// <param name="ingredient">Ингредиент для сериализации.</param>
+    /// <returns>Строковое представление ингредиента.</returns>
     public string Serialize(Ingredient ingredient)
     {
         var res = ingredient.Name;
@@ -25,6 +44,14 @@ public class TxtIngredientSerializer : IIngredientSerializer
         return res;
     }
 
+    /// <summary>
+    /// Десериализует ингредиент из текстовой строки.
+    /// </summary>
+    /// <param name="txtString">Строковое представление ингредиента.</param>
+    /// <returns>Экземпляр десериализованного ингредиента.</returns>
+    /// <exception cref="FormatException">
+    /// Выбрасывается, если количество ингредиента не является целым числом больше 0.
+    /// </exception>
     public Ingredient Deserialize(string txtString)
     {
         var args = txtString.Split(" - ", 2, StringSplitOptions.TrimEntries);

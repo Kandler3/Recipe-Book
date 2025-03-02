@@ -1,14 +1,28 @@
-﻿using ConsoleUI.Prompts;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using ConsoleUI.Prompts;
 using Contracts.Enums;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
+/// <summary>
+/// Страница настройки сортировки рецептов.
+/// </summary>
+/// <param name="console">Консольный интерфейс для взаимодействия с пользователем.</param>
+/// <param name="query">Объект запроса рецептов, содержащий параметры сортировки.</param>
 public class RecipeSortingPage(IAnsiConsole console, RecipesQuery query)
 {
     private IAnsiConsole Console { get; } = console;
     private RecipesQuery Query { get; } = query;
 
+    /// <summary>
+    /// Отображает страницу выбора параметра сортировки и направления.
+    /// </summary>
     public void Show()
     {
         Console.Clear();
@@ -30,13 +44,18 @@ public class RecipeSortingPage(IAnsiConsole console, RecipesQuery query)
             case "Сбросить":
                 ShowResetPrompt();
                 return;
-            case "Назад": return;
-            default: return;
+            case "Назад":
+                return;
+            default:
+                return;
         }
 
         Query.AscendingSorting = new ConfirmPrompt(Console, "Сортировать по возрастанию?").Ask();
     }
 
+    /// <summary>
+    /// Отображает подтверждение сброса параметров сортировки.
+    /// </summary>
     private void ShowResetPrompt()
     {
         Console.Clear();

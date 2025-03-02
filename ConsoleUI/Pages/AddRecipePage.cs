@@ -1,4 +1,10 @@
-﻿using ConsoleUI.Prompts;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
 using Contracts.Interfaces;
 using Models;
@@ -6,11 +12,19 @@ using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
+/// <summary>
+/// Страница для добавления нового рецепта.
+/// </summary>
+/// <param name="console">Консольный интерфейс для взаимодействия с пользователем.</param>
+/// <param name="service">Сервис для управления рецептами.</param>
 public class AddRecipePage(IAnsiConsole console, IRecipeService service)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
 
+    /// <summary>
+    /// Отображает страницу добавления рецепта и выполняет ввод данных.
+    /// </summary>
     public void Show()
     {
         var title = Console.Prompt(new TextPrompt<string>("Название рецепта: "));
@@ -29,6 +43,12 @@ public class AddRecipePage(IAnsiConsole console, IRecipeService service)
         new MessagePage(Console, new SuccessText("Рецепт добавлен\n")).Show();
     }
 
+    /// <summary>
+    /// Парсит введенную строку в объект ингредиента.
+    /// </summary>
+    /// <param name="input">Входная строка в формате "[название] - [количество] [ед. измерения]".</param>
+    /// <returns>Объект ингредиента.</returns>
+    /// <exception cref="FormatException">Выбрасывается, если количество не является положительным целым числом.</exception>
     private static Ingredient ParseIngredient(string input)
     {
         var args = input.Split(" - ", 2, StringSplitOptions.TrimEntries);

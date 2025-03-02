@@ -1,10 +1,23 @@
-﻿using Spectre.Console;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using Spectre.Console;
 using Spectre.Console.Rendering;
 
 namespace ConsoleUI.Widgets;
 
+/// <summary>
+/// Панель для отображения параметров запроса рецептов.
+/// </summary>
 public class QueryPanel : IRenderable
 {
+    /// <summary>
+    /// Инициализирует новую панель запроса.
+    /// </summary>
+    /// <param name="query">Параметры запроса рецептов.</param>
     public QueryPanel(RecipesQuery query)
     {
         var rows = Utils.GenerateQueryRows(query);

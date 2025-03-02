@@ -1,4 +1,10 @@
-﻿using System.Security.Authentication;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using System.Security.Authentication;
 using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
 using Contracts.Interfaces;
@@ -6,6 +12,13 @@ using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
+/// <summary>
+/// Страница экспорта рецептов в локальный файл или на Яндекс.Диск.
+/// </summary>
+/// <param name="console">Консольный интерфейс для взаимодействия с пользователем.</param>
+/// <param name="service">Сервис для работы с рецептами.</param>
+/// <param name="query">Параметры запроса для фильтрации экспортируемых рецептов.</param>
+/// <param name="diskService">Сервис для работы с Яндекс.Диском.</param>
 public class ExportPage(
     IAnsiConsole console,
     IRecipeService service,
@@ -17,6 +30,9 @@ public class ExportPage(
     private RecipesQuery Query { get; } = query;
     private IYandexDiskService DiskService { get; } = diskService;
 
+    /// <summary>
+    /// Отображает страницу экспорта и выполняет процесс сохранения рецептов.
+    /// </summary>
     public void Show()
     {
         Console.Clear();
@@ -58,7 +74,7 @@ public class ExportPage(
         catch (AuthenticationException) when (!local)
         {
             DiskService.OAuthToken = null;
-            new MessagePage(Console, new ErrorText("Ошибка авторизации я Яндекс Диск\n")).Show();
+            new MessagePage(Console, new ErrorText("Ошибка авторизации на Яндекс Диске\n")).Show();
         }
         catch (InvalidOperationException) when (!local)
         {

@@ -1,4 +1,10 @@
-﻿using System.Net;
+﻿/*
+ * Ковальчук Артём Игоревич
+ * БПИ 2410-2
+ * Вариант 3
+ */
+
+using System.Net;
 using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
@@ -8,6 +14,11 @@ using Models;
 
 namespace Services;
 
+/// <summary>
+/// Сервис для генерации рецептов с использованием GigaChat.
+/// </summary>
+/// <param name="authorizationKey">Ключ авторизации для получения токена доступа.</param>
+/// <param name="recipeSerializer">Сериализатор для десериализации рецепта из JSON.</param>
 public class GigaChatService(string authorizationKey, ISingleRecipeSerializer recipeSerializer) : IGigaChatService
 {
     private const string GetAccessTokenUrl = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth";
@@ -22,7 +33,10 @@ public class GigaChatService(string authorizationKey, ISingleRecipeSerializer re
     {
         ServerCertificateCustomValidationCallback = (_, _, _, _) => true
     };
-
+    
+    /// <summary>
+    /// Системный промпт.
+    /// </summary>
     private static string SystemMessage =>
         "Сгенерируй рецепт, который соответствует следующей JSON-схеме. " +
         "Вывод должен содержать только валидный JSON-объект, без каких-либо дополнительных комментариев или пояснений. " +
@@ -58,6 +72,11 @@ public class GigaChatService(string authorizationKey, ISingleRecipeSerializer re
         "}\n\n" +
         "Пожалуйста, сгенерируй рецепт в виде JSON, строго соответствующий указанной схеме.";
 
+    /// <summary>
+    /// Генерирует рецепт на основе заданного запроса.
+    /// </summary>
+    /// <param name="prompt">Текст запроса для генерации рецепта.</param>
+    /// <returns>Сгенерированный рецепт.</returns>
     public Recipe GenerateRecipe(string prompt)
     {
         var recipeString = GenerateRecipeString(prompt);
@@ -72,6 +91,12 @@ public class GigaChatService(string authorizationKey, ISingleRecipeSerializer re
         }
     }
 
+    /// <summary>
+    /// Обновляет токен доступа, отправляя запрос на получение OAuth токена.
+    /// </summary>
+    /// <exception cref="AuthenticationException">
+    /// Выбрасывается, если в ответе отсутствует токен доступа.
+    /// </exception>
     private void RefreshAccessToken()
     {
         using var httpClient = new HttpClient(IgnoreCertificateIssuesHandler);
@@ -97,6 +122,11 @@ public class GigaChatService(string authorizationKey, ISingleRecipeSerializer re
         AccessToken = accessToken ?? throw new AuthenticationException("No access token in response");
     }
 
+    /// <summary>
+    /// Формирует тело запроса для первого запроса к API GigaChat.
+    /// </summary>
+    /// <param name="prompt">Текст запроса от пользователя.</param>
+    /// <returns>Контент запроса в формате JSON.</returns>
     private static StringContent GetFirstRequestBody(string prompt)
     {
         var jsonObject = new JsonObject
@@ -124,6 +154,12 @@ public class GigaChatService(string authorizationKey, ISingleRecipeSerializer re
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
+    /// <summary>
+    /// Формирует тело запроса для второго запроса к API GigaChat с исправлением формата.
+    /// </summary>
+    /// <param name="prompt">Текст запроса от пользователя.</param>
+    /// <param name="firstReqContent">Содержимое ответа первого запроса.</param>
+    /// <returns>Контент запроса в формате JSON.</returns>
     private static StringContent GetSecondRequestBody(string prompt, string firstReqContent)
     {
         var jsonObject = new JsonObject
@@ -165,7 +201,12 @@ public class GigaChatService(string authorizationKey, ISingleRecipeSerializer re
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
-
+    /// <summary>
+    /// Отправляет запрос к API GigaChat с заданным запросом и, при необходимости, содержимым первого запроса.
+    /// </summary>
+    /// <param name="prompt">Текст запроса от пользователя.</param>
+    /// <param name="firstReqContent">Содержимое ответа первого запроса (опционально).</param>
+    /// <returns>Ответ HTTP-сервера.</returns>
     private HttpResponseMessage MakePromptRequest(string prompt, string? firstReqContent = null)
     {
         using var client = new HttpClient(IgnoreCertificateIssuesHandler);
@@ -178,6 +219,15 @@ public class GigaChatService(string authorizationKey, ISingleRecipeSerializer re
         return client.SendAsync(request).Result;
     }
 
+    /// <summary>
+    /// Генерирует строку рецепта, отправляя запросы к API GigaChat.
+    /// </summary>
+    /// <param name="prompt">Текст запроса от пользователя.</param>
+    /// <param name="firstReqContent">Содержимое первого запроса (опционально).</param>
+    /// <returns>Строка, содержащая JSON-представление рецепта.</returns>
+    /// <exception cref="HttpRequestException">
+    /// Выбрасывается, если в ответе отсутствует корректная строка рецепта.
+    /// </exception>
     private string GenerateRecipeString(string prompt, string? firstReqContent = null)
     {
         var response = MakePromptRequest(prompt, firstReqContent);
