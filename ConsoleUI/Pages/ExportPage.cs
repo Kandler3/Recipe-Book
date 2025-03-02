@@ -41,7 +41,7 @@ public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQue
         try
         {
             Service.Export(filepath, format, Query,local);
-            new MessagePage(Console, new SuccessText("Файл сохранен")).Show();
+            new MessagePage(Console, new SuccessText("Файл сохранен\n")).Show();
         }
         catch (IOException)
         {

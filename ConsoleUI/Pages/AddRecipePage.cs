@@ -27,7 +27,7 @@ public class AddRecipePage(IAnsiConsole console, IRecipeService service)
             instructions.Count != 0 ? instructions : null
         ));
         
-        new MessagePage(Console, new SuccessText("Рецепт добавлен")).Show();
+        new MessagePage(Console, new SuccessText("Рецепт добавлен\n")).Show();
     }
     
     private Ingredient ParseIngredient(string input)

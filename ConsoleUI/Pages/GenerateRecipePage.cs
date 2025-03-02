@@ -62,11 +62,11 @@ public class GenerateRecipePage(IAnsiConsole console, IRecipeService recipeServi
     {
         if (GeneratedRecipe == null)
         {
-            new MessagePage(Console, new ErrorText("Нет сгенерированного рецепта")).Show();
+            new MessagePage(Console, new ErrorText("Нет сгенерированного рецепта\n")).Show();
             return;
         }
         
         RecipeService.AddRecipe(GeneratedRecipe!);
-        new MessagePage(Console, new SuccessText("Рецепт добавлен")).Show();
+        new MessagePage(Console, new SuccessText("Рецепт добавлен\n")).Show();
     }
 }

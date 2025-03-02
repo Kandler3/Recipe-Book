@@ -19,12 +19,12 @@ public class ShoppingListPage(IAnsiConsole console, IShoppingListService service
         Console.Write(new ShoppingListPanel(ShoppingList));
 
         string option = Console.Prompt(
-            new SelectionPrompt<string>().AddChoices("Сохранить список в файл", "Назад")
+            new SelectionPrompt<string>().AddChoices("Сохранить список в txt файл", "Назад")
         );
 
         switch (option)
         {
-            case "Сохранить список в файл": OnExport(); break;
+            case "Сохранить список в txt файл": OnExport(); break;
             case "Назад": return;
         }
     }
@@ -40,7 +40,7 @@ public class ShoppingListPage(IAnsiConsole console, IShoppingListService service
         try
         {
             Service.Export(ShoppingList, filepath);
-            new MessagePage(Console, new SuccessText("Список сохранен")).Show();
+            new MessagePage(Console, new SuccessText("Список сохранен\n")).Show();
         }
         catch (IOException)
         {

@@ -34,7 +34,7 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
         try
         {
             Service.Import(filepath, format, local);
-            new MessagePage(Console, new SuccessText("Рецепты загружены")).Show();
+            new MessagePage(Console, new SuccessText("Рецепты загружены\n")).Show();
         }
         catch (FormatException)
         {
