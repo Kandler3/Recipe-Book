@@ -23,4 +23,33 @@ internal static class Utils
         };
     }
 
+    public static List<string> GenerateQueryRows(RecipesQuery query)
+    {
+        List<string> rows = [];
+        
+        if (query.TitleSearchQuery != null)
+            rows.Add($"Фильтр по названию: {query.TitleSearchQuery}");
+        
+        if (query.CategoriesList.Count != 0)
+            rows.Add($"Фильтр по категориям: {string.Join(", ", query.CategoriesList)}");
+        
+        if (query.IngredientsList.Count != 0)
+            rows.Add($"Фильтр по ингредиентам: {string.Join(", ", query.IngredientsList)}");
+        
+        if (query.SortingParameter != null)
+            rows.Add($"Сортировка по {(query.AscendingSorting!.Value ? "возрастанию" : "убыванию")}: {ToLocaleSortingParameter(query.SortingParameter.Value)}");
+        
+        return rows;
+    }
+
+    public static string ToLocaleSortingParameter(RecipeSortingParameter sortingParameter)
+    {
+        return sortingParameter switch
+        {
+            RecipeSortingParameter.Title => "Название",
+            RecipeSortingParameter.Category => "Категория",
+            _ => sortingParameter.ToString()
+        };
+    }
+
 }

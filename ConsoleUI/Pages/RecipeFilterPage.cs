@@ -21,7 +21,6 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
                     "Название",
                     "Категория",
                     "Ингридиенты",
-                    "Сбросить",
                     "Назад"
                 )
         );
@@ -32,7 +31,6 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
                 break;
             case "Категория": ShowCategoryFilter(); break;
             case "Ингридиенты": ShowIngredientFilter(); break;
-            case "Сбросить": ShowResetPrompt(); break;
             case "Назад": return;
         }
 
@@ -43,18 +41,25 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
     {
         Console.Clear();
         string query = Console.Prompt(
-            new TextPrompt<string>("Фильтр по названию: ")
+            new TextPrompt<string>("Фильтр по названию: ").AllowEmpty()
         );
         Query.TitleSearchQuery = query;
     }
 
     private void ShowCategoryFilter()
     {
+        var categories = Service.GetCategories().ToList();
+        if (categories.Count == 0)
+        {
+            new MessagePage(Console, new Text("Нет доступных категорий\n")).Show();
+            return;
+        }
+        
         var prompt =
             new MultiSelectionPrompt<string>()
                 .NotRequired()
                 .Title("Выберите категории")
-                .AddChoices(Service.GetCategories());
+                .AddChoices(categories);
 
         foreach (string category in Query.CategoriesList)
         {
@@ -68,11 +73,17 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
 
     private void ShowIngredientFilter()
     {
+        var ingredients = Service.GetIngredients().ToList();
+        if (ingredients.Count == 0)
+        {
+            new MessagePage(Console, new Text("Нет доступных ингредиентов\n")).Show();
+            return;
+        }
         var prompt =
             new MultiSelectionPrompt<string>()
                 .NotRequired()
                 .Title("Выберите ингредиенты")
-                .AddChoices(Service.GetIngredients());
+                .AddChoices(ingredients);
 
         foreach (string ingredient in Query.IngredientsList)
         {
@@ -82,11 +93,5 @@ public class RecipeFilterPage(IAnsiConsole console, IRecipeService service, Reci
         Console.Clear();
         Query.IngredientsList.Clear();
         Query.IngredientsList.AddRange(Console.Prompt(prompt));
-    }
-
-    private void ShowResetPrompt()
-    {
-        if (new ConfirmPrompt(Console, "Вы уверены, что хотите сбросить фильтрацию?").Ask())
-            Query.ResetFilter();
     }
 }

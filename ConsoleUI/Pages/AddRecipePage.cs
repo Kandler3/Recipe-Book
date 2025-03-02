@@ -15,12 +15,12 @@ public class AddRecipePage(IAnsiConsole console, IRecipeService service)
     public void Show()
     {
         var title = Console.Prompt(new TextPrompt<string>("Название рецепта: "));
-        var category = Console.Prompt(new TextPrompt<string>("Категория: "));
+        var category = Console.Prompt(new TextPrompt<string>("Категория: ").AllowEmpty());
         List<Ingredient> ingredients = new ListPrompt<Ingredient>(Console,
             "Ингредиенты (формат: \"[название] - [количество] [ед. измерения]\"): ", ParseIngredient).Ask();
         List<string> instructions = new ListPrompt<string>(Console, "Инструкция: ", str => str).Ask();
 
-        service.AddRecipe(new Recipe(
+        Service.AddRecipe(new Recipe(
             title,
             category != "" ? category : null,
             ingredients.Count != 0 ? ingredients : null,
@@ -30,7 +30,7 @@ public class AddRecipePage(IAnsiConsole console, IRecipeService service)
         new MessagePage(Console, new SuccessText("Рецепт добавлен\n")).Show();
     }
     
-    private Ingredient ParseIngredient(string input)
+    private static Ingredient ParseIngredient(string input)
     {
         string[] args = input.Split(" - ", 2, StringSplitOptions.TrimEntries);
         string name = args[0];

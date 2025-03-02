@@ -56,7 +56,7 @@ public class RecipePanel: IRenderable
         {
             try
             {
-                images.Add(new CanvasImage(path).MaxWidth(30));
+                images.Add(new CanvasImage(path).MaxWidth(15));
             }
             catch (Exception e) when (e is ImageFormatException or NotSupportedException or IOException)
             {
@@ -64,7 +64,7 @@ public class RecipePanel: IRenderable
             }
         }
         
-        return new Columns(images).Collapse();
+        return new Columns(images).Expand();
     }
 
     public Measurement Measure(RenderOptions options, int maxWidth) =>

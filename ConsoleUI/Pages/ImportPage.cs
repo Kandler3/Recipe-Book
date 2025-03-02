@@ -22,7 +22,9 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
         ) == "Этот компьютер";
         
         FileFormat format = new SelectFormatPrompt(Console, "Выберите формат импортируемого файла").Ask();
-        string filepath = new FilepathPrompt(Console, "Введите путь до файла", local, format).Ask();
+        string? filepath = new FilepathPrompt(Console, "Введите путь до файла", local, format).Ask();
+        
+        if (filepath == null) return;
 
         if (!local && DiskService.OAuthToken == null)
         {
@@ -39,6 +41,10 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
         catch (FormatException)
         {
             new MessagePage(Console, new ErrorText("Не удалось десериализовать данные из файла\n")).Show();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            new MessagePage(Console, new ErrorText("Нет доступа к файлу\n")).Show();
         }
         catch (IOException)
         {

@@ -31,7 +31,8 @@ public class ShoppingListPage(IAnsiConsole console, IShoppingListService service
 
     private void OnExport()
     {
-        string filepath = new FilepathPrompt(Console, "Введите путь до файла", false, FileFormat.Txt).Ask();
+        string? filepath = new FilepathPrompt(Console, "Введите путь до файла", false, FileFormat.Txt).Ask();
+        if (filepath == null) return;
         if (
             File.Exists(filepath) 
             && !new ConfirmPrompt(Console, "Файл уже существует. Перезаписать?").Ask()
@@ -41,6 +42,10 @@ public class ShoppingListPage(IAnsiConsole console, IShoppingListService service
         {
             Service.Export(ShoppingList, filepath);
             new MessagePage(Console, new SuccessText("Список сохранен\n")).Show();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            new MessagePage(Console, new ErrorText("Нет доступа к файлу\n")).Show();
         }
         catch (IOException)
         {

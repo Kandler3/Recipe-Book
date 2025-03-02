@@ -14,7 +14,7 @@ public class RecipesListPage
     private RecipesQuery RecipesQuery { get; }
     private IList<Recipe> Recipes { get; set; }
 
-    private int PageSize { get; } = 3;
+    private int PageSize { get; } = 10;
     private int CurrentPage { get; set; } = 0;
     private int SelectedIndex { get; set; }
     private int MaxPage => Recipes.Count / PageSize + (Recipes.Count % PageSize > 0 ? 1 : 0);
@@ -32,6 +32,12 @@ public class RecipesListPage
     public void Show()
     {
         Console.Clear();
+        if (Recipes.Count == 0)
+        {
+            new MessagePage(Console, new Text("Нет рецептов\n")).Show();
+            return;
+        }
+        
         bool run = true;
         ConsoleKey key;
         do

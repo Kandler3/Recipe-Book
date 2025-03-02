@@ -28,10 +28,10 @@ public class RecipePage(IAnsiConsole console, IRecipeService service,Recipe reci
         );
         if (option.Equals("Добавить изображение"))
         {
-            Service.AddRecipeImage(
-                PanelRecipe, 
-                new FilepathPrompt(Console, "Введите путь до изображения", true).Ask()
-            );
+            string? imagePath = new FilepathPrompt(Console, "Введите путь до изображения", true).Ask();
+            if (imagePath == null) return;
+            
+            Service.AddRecipeImage(PanelRecipe, imagePath);
 
             Show();
         }

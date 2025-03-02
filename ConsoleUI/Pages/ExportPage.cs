@@ -23,7 +23,9 @@ public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQue
         ) == "Этот компьютер";
         
         FileFormat format = new SelectFormatPrompt(Console, "Выберите формат экспорта").Ask();
-        string filepath = new FilepathPrompt(Console, "Введите путь до файла", false, format).Ask();
+        string? filepath = new FilepathPrompt(Console, "Введите путь до файла", false, format).Ask();
+        
+        if (filepath == null) return;
 
         if (
             local 
@@ -42,6 +44,10 @@ public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQue
         {
             Service.Export(filepath, format, Query,local);
             new MessagePage(Console, new SuccessText("Файл сохранен\n")).Show();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            new MessagePage(Console, new ErrorText("Нет доступа к файлу\n")).Show();
         }
         catch (IOException)
         {

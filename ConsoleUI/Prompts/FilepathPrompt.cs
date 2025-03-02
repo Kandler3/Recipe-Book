@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using ConsoleUI.Widgets;
+using Contracts;
 using Contracts.Enums;
 using Spectre.Console;
 
@@ -11,19 +12,26 @@ public class FilepathPrompt(IAnsiConsole console, string message, bool existingF
     private bool ExistingFile { get; } = existingFile;
     private FileFormat? Format { get; } = format;
 
-    public string Ask()
+    public string? Ask()
     {
         Console.Clear();
+        Console.Write(new HintText("Чтобы вернуться введите пустую строку\n"));
         string result = Console.Prompt(
-            new TextPrompt<string>(Message)
+            new TextPrompt<string>(Message).AllowEmpty()
         );
+        
+        if (result == "") return null;
         
         while (!IsValidPath(result, out string error))
         {
             Console.Clear();
+            Console.Write(new HintText("Чтобы вернуться введите пустую строку\n"));
+            Console.Write(new ErrorText(error + "\n"));
             result = Console.Prompt(
-                new TextPrompt<string>($"{error}\n{Message}")
+                new TextPrompt<string>(Message).AllowEmpty()
             );
+        
+            if (result == "") return null;
         }
         
         return result;

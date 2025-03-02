@@ -28,8 +28,7 @@ public class MainPage(
             new MenuOption("Импортировать рецепты", OnImport),
             new MenuOption("Экспортировать рецепты", OnExport),
             new MenuOption("Показать рецепты", OnShowRecipes),
-            new MenuOption("Фильтр", OnAddFilter),
-            new MenuOption("Сортировка", OnAddSort),
+            new MenuOption("Фильтр и сортировка", OnFilterAndSorting),
             new MenuOption("Добавить рецепт", OnAddRecipe),
             new MenuOption("Сгенерировать список покупок", OnGenerateShoppingList),
             new MenuOption("Рецепт дня", OnShowRandomRecipe),
@@ -52,14 +51,9 @@ public class MainPage(
         new ExportPage(Console, RecipeService, RecipesQuery, YandexDiskService).Show();
     }
 
-    private void OnAddFilter()
+    private void OnFilterAndSorting()
     {
-        new RecipeFilterPage(Console, RecipeService, RecipesQuery).Show();
-    }
-
-    private void OnAddSort()
-    {
-        new RecipeSortingPage(Console, RecipesQuery).Show();
+        new QueryPage(Console, RecipeService, RecipesQuery).Show();
     }
 
     private void OnAddRecipe()
