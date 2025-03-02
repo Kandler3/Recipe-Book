@@ -58,7 +58,7 @@ public class RecipePanel: IRenderable
             {
                 images.Add(new CanvasImage(path).MaxWidth(30));
             }
-            catch (Exception e) when (e is ImageFormatException or NotSupportedException)
+            catch (Exception e) when (e is ImageFormatException or NotSupportedException or IOException)
             {
                 images.Add(new Text($"Не удалось загрузить изображение {path}"));
             }
