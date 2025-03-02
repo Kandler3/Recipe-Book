@@ -1,5 +1,6 @@
 ﻿using System.Security.Authentication;
 using ConsoleUI.Prompts;
+using ConsoleUI.Widgets;
 using Contracts;
 using Contracts.Enums;
 using Contracts.Interfaces;
@@ -33,23 +34,24 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
         try
         {
             Service.Import(filepath, format, local);
+            new MessagePage(Console, new SuccessText("Рецепты загружены")).Show();
         }
         catch (FormatException)
         {
-            new ErrorPage(Console, "Не удалось десериализовать данные из файла").Show();
+            new MessagePage(Console, new ErrorText("Не удалось десериализовать данные из файла\n")).Show();
         }
         catch (IOException)
         {
-            new ErrorPage(Console, "Ошибка при чтении файла").Show();
+            new MessagePage(Console, new ErrorText("Ошибка при записи в файл\n")).Show();
         }
         catch (AuthenticationException) when (!local)
         {
             DiskService.OAuthToken = null;
-            new ErrorPage(Console, "Ошибка авторизации я Яндекс Диск").Show();
+            new MessagePage(Console, new ErrorText("Ошибка авторизации я Яндекс Диск\n")).Show();
         }
         catch (InvalidOperationException) when (!local)
         {
-            new ErrorPage(Console, "Ошибка при работе с Яндекс Диском").Show();
+            new MessagePage(Console, new ErrorText("Ошибка при работе с Яндекс Диском\n")).Show();
         }
     }
 }

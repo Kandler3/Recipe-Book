@@ -57,4 +57,16 @@ public class GenerateRecipePage(IAnsiConsole console, IRecipeService recipeServi
             case "Назад": return;
         }
     }
+
+    private void OnSave()
+    {
+        if (GeneratedRecipe == null)
+        {
+            new MessagePage(Console, new ErrorText("Нет сгенерированного рецепта")).Show();
+            return;
+        }
+        
+        RecipeService.AddRecipe(GeneratedRecipe!);
+        new MessagePage(Console, new SuccessText("Рецепт добавлен")).Show();
+    }
 }

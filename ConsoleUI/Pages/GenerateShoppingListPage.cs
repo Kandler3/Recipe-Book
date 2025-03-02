@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using ConsoleUI.Widgets;
+using Contracts;
 using Contracts.Interfaces;
 using Models;
 using Spectre.Console;
@@ -23,7 +24,7 @@ public class GenerateShoppingListPage(
         var recipes = RecipeService.GetRecipes(Query);
         if (recipes.Count == 0)
         {
-            new ErrorPage(Console, "Нет рецептов").Show();
+            new MessagePage(Console, new ErrorText("Нет рецептов\n")).Show();
             return;
         }
         

@@ -16,14 +16,11 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
         new Style(
             foreground: ConsoleColor.Magenta,
             background: ConsoleColor.Black,
-            decoration: Decoration.SlowBlink
+            decoration: Decoration.RapidBlink
         )
     );
 
-    private Text NoRecipesText { get; } = new(
-        "Нет доступных рецептов((\n",
-        new Style(foreground: ConsoleColor.DarkGray)
-    );
+    private HintText NoRecipesText { get; } = new("Нет доступных рецептов((\n");
 
     private HintText ReturnText { get; } = new("Чтобы вернуться нажмите Backspace");
 

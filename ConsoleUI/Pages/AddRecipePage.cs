@@ -1,4 +1,5 @@
 ﻿using ConsoleUI.Prompts;
+using ConsoleUI.Widgets;
 using Contracts;
 using Contracts.Interfaces;
 using Models;
@@ -25,6 +26,8 @@ public class AddRecipePage(IAnsiConsole console, IRecipeService service)
             ingredients.Count != 0 ? ingredients : null,
             instructions.Count != 0 ? instructions : null
         ));
+        
+        new MessagePage(Console, new SuccessText("Рецепт добавлен")).Show();
     }
     
     private Ingredient ParseIngredient(string input)

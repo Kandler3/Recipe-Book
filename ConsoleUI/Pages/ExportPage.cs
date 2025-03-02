@@ -1,5 +1,6 @@
 ﻿using System.Security.Authentication;
 using ConsoleUI.Prompts;
+using ConsoleUI.Widgets;
 using Contracts;
 using Contracts.Enums;
 using Contracts.Interfaces;
@@ -24,6 +25,12 @@ public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQue
         FileFormat format = new SelectFormatPrompt(Console, "Выберите формат экспорта").Ask();
         string filepath = new FilepathPrompt(Console, "Введите путь до файла", false, format).Ask();
 
+        if (
+            local 
+            && File.Exists(filepath) 
+            && !new ConfirmPrompt(Console, "Файл уже существует. Перезаписать?").Ask()
+        ) return;
+        
         if (!local && DiskService.OAuthToken == null)
         {
             DiskService.OpenAuthorizationPage();
@@ -34,19 +41,20 @@ public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQue
         try
         {
             Service.Export(filepath, format, Query,local);
+            new MessagePage(Console, new SuccessText("Файл сохранен")).Show();
         }
         catch (IOException)
         {
-            new ErrorPage(Console, "Ошибка при чтении файла").Show();
+            new MessagePage(Console, new ErrorText("Ошибка при чтении файла\n")).Show();
         }
         catch (AuthenticationException) when (!local)
         {
             DiskService.OAuthToken = null;
-            new ErrorPage(Console, "Ошибка авторизации я Яндекс Диск").Show();
+            new MessagePage(Console, new ErrorText("Ошибка авторизации я Яндекс Диск\n")).Show();
         }
         catch (InvalidOperationException) when (!local)
         {
-            new ErrorPage(Console, "Ошибка при работе с Яндекс Диском").Show();
+            new MessagePage(Console, new ErrorText("Ошибка при работе с Яндекс Диском\n")).Show();
         }
     }
 }

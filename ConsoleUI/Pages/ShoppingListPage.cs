@@ -32,9 +32,15 @@ public class ShoppingListPage(IAnsiConsole console, IShoppingListService service
     private void OnExport()
     {
         string filepath = new FilepathPrompt(Console, "Введите путь до файла", false, FileFormat.Txt).Ask();
+        if (
+            File.Exists(filepath) 
+            && !new ConfirmPrompt(Console, "Файл уже существует. Перезаписать?").Ask()
+        ) return;
+        
         try
         {
             Service.Export(ShoppingList, filepath);
+            new MessagePage(Console, new SuccessText("Список сохранен")).Show();
         }
         catch (IOException)
         {
