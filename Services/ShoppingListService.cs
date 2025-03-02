@@ -1,5 +1,4 @@
-﻿using Contracts;
-using Contracts.Interfaces;
+﻿using Contracts.Interfaces;
 using Models;
 
 namespace Services;
@@ -7,7 +6,7 @@ namespace Services;
 public class ShoppingListService(IIngredientSerializer serializer) : IShoppingListService
 {
     private IIngredientSerializer Serializer { get; } = serializer;
-    
+
     public IEnumerable<Ingredient> GenerateShoppingList(IEnumerable<Recipe> recipes)
     {
         Dictionary<(string, string?), Ingredient> res = [];
@@ -19,16 +18,16 @@ public class ShoppingListService(IIngredientSerializer serializer) : IShoppingLi
             foreach (var ingredient in recipe.Ingredients)
             {
                 var key = (ingredient.Name, ingredient.Measurement);
-                if (res.TryGetValue(key, out Ingredient? value))
+                if (res.TryGetValue(key, out var value))
                 {
                     value.Quantity += ingredient.Quantity;
                     continue;
                 }
-                
+
                 res[key] = ingredient;
             }
         }
-        
+
         return res.Values;
     }
 

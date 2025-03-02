@@ -16,7 +16,7 @@ public class GenerateRecipePage(IAnsiConsole console, IRecipeService recipeServi
     public void Show()
     {
         Console.Clear();
-        string prompt = Console.Prompt(new TextPrompt<string>("Опишите рецепт: "));
+        var prompt = Console.Prompt(new TextPrompt<string>("Опишите рецепт: "));
         GenerateRecipe(prompt);
     }
 
@@ -37,23 +37,27 @@ public class GenerateRecipePage(IAnsiConsole console, IRecipeService recipeServi
         {
             if (e is FormatException)
                 Console.Write(new ErrorText("Не удалось распарсить ответ GigaChat в рецепт\n"));
-            
+
             else if (e is AuthenticationException)
                 Console.Write(new ErrorText("Ошибка при авторизации в GigaChat. Проверьте .env\n"));
 
             else
                 Console.Write(new ErrorText("Ошибка при работе с GigaChat\n"));
-            
+
             option = Console.Prompt(
                 new SelectionPrompt<string>()
                     .AddChoices("Повторить генерацию", "Назад")
             );
         }
-        
+
         switch (option)
         {
-            case "Повторить генерацию": GenerateRecipe(prompt); break;
-            case "Сохранить рецепт": RecipeService.AddRecipe(GeneratedRecipe!); break;
+            case "Повторить генерацию":
+                GenerateRecipe(prompt);
+                break;
+            case "Сохранить рецепт":
+                RecipeService.AddRecipe(GeneratedRecipe!);
+                break;
             case "Назад": return;
         }
     }
@@ -65,7 +69,7 @@ public class GenerateRecipePage(IAnsiConsole console, IRecipeService recipeServi
             new MessagePage(Console, new ErrorText("Нет сгенерированного рецепта\n")).Show();
             return;
         }
-        
+
         RecipeService.AddRecipe(GeneratedRecipe!);
         new MessagePage(Console, new SuccessText("Рецепт добавлен\n")).Show();
     }

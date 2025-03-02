@@ -18,26 +18,28 @@ public class ShoppingListPage(IAnsiConsole console, IShoppingListService service
         Console.Clear();
         Console.Write(new ShoppingListPanel(ShoppingList));
 
-        string option = Console.Prompt(
+        var option = Console.Prompt(
             new SelectionPrompt<string>().AddChoices("Сохранить список в txt файл", "Назад")
         );
 
         switch (option)
         {
-            case "Сохранить список в txt файл": OnExport(); break;
+            case "Сохранить список в txt файл":
+                OnExport();
+                break;
             case "Назад": return;
         }
     }
 
     private void OnExport()
     {
-        string? filepath = new FilepathPrompt(Console, "Введите путь до файла", false, FileFormat.Txt).Ask();
+        var filepath = new FilepathPrompt(Console, "Введите путь до файла", false, FileFormat.Txt).Ask();
         if (filepath == null) return;
         if (
-            File.Exists(filepath) 
+            File.Exists(filepath)
             && !new ConfirmPrompt(Console, "Файл уже существует. Перезаписать?").Ask()
         ) return;
-        
+
         try
         {
             Service.Export(ShoppingList, filepath);

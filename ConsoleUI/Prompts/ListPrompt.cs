@@ -32,7 +32,7 @@ public class ListPrompt<T>(IAnsiConsole console, string message, Func<string, T>
                 );
             }
         }
-        
+
         return res;
     }
 }

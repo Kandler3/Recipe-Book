@@ -1,8 +1,6 @@
 ﻿using System.Security.Authentication;
 using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
-using Contracts;
-using Contracts.Enums;
 using Contracts.Interfaces;
 using Spectre.Console;
 
@@ -17,13 +15,13 @@ public class ImportPage(IAnsiConsole console, IRecipeService service, IYandexDis
     public void Show()
     {
         Console.Clear();
-        bool local = Console.Prompt(
+        var local = Console.Prompt(
             new SelectionPrompt<string>().Title("Выберите источник").AddChoices("Этот компьютер", "Яндекс Диск")
         ) == "Этот компьютер";
-        
-        FileFormat format = new SelectFormatPrompt(Console, "Выберите формат импортируемого файла").Ask();
-        string? filepath = new FilepathPrompt(Console, "Введите путь до файла", local, format).Ask();
-        
+
+        var format = new SelectFormatPrompt(Console, "Выберите формат импортируемого файла").Ask();
+        var filepath = new FilepathPrompt(Console, "Введите путь до файла", local, format).Ask();
+
         if (filepath == null) return;
 
         if (!local && DiskService.OAuthToken == null)

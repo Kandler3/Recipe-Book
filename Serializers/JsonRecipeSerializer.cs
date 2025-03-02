@@ -1,7 +1,5 @@
-﻿using System.Text;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
-using Contracts;
 using Contracts.Interfaces;
 using Models;
 
@@ -11,7 +9,7 @@ public class JsonRecipeSerializer(bool escapeCyrillic) : IRecipeSerializer, ISin
 {
     private JsonSerializerOptions Options { get; } = new()
     {
-        Encoder = escapeCyrillic ? JavaScriptEncoder.Default : JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        Encoder = escapeCyrillic ? JavaScriptEncoder.Default : JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     public void FileSerialize(IEnumerable<Recipe> recipes, string outputFilepath)
@@ -37,7 +35,8 @@ public class JsonRecipeSerializer(bool escapeCyrillic) : IRecipeSerializer, ISin
     {
         try
         {
-            return JsonSerializer.Deserialize<Recipe>(jsonString, Options) ?? throw new FormatException("Unable to parse the Json file");
+            return JsonSerializer.Deserialize<Recipe>(jsonString, Options) ??
+                   throw new FormatException("Unable to parse the Json file");
         }
         catch (JsonException e)
         {

@@ -5,8 +5,6 @@ namespace ConsoleUI.Widgets;
 
 public class QueryPanel : IRenderable
 {
-    private Rows QueryRows { get; }
-
     public QueryPanel(RecipesQuery query)
     {
         var rows = Utils.GenerateQueryRows(query);
@@ -15,11 +13,19 @@ public class QueryPanel : IRenderable
             QueryRows = new Rows(new Text("Тут отобразятся применяемые параметры"));
             return;
         }
-        
+
         QueryRows = new Rows(rows.Select(r => new Text(r)));
     }
 
-    public Measurement Measure(RenderOptions options, int maxWidth) => ((IRenderable)QueryRows).Measure(options, maxWidth);
+    private Rows QueryRows { get; }
 
-    public IEnumerable<Segment> Render(RenderOptions options, int maxWidth) => ((IRenderable)QueryRows).Render(options, maxWidth);
+    public Measurement Measure(RenderOptions options, int maxWidth)
+    {
+        return ((IRenderable)QueryRows).Measure(options, maxWidth);
+    }
+
+    public IEnumerable<Segment> Render(RenderOptions options, int maxWidth)
+    {
+        return ((IRenderable)QueryRows).Render(options, maxWidth);
+    }
 }

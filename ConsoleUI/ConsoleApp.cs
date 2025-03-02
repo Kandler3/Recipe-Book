@@ -1,13 +1,12 @@
 ﻿using ConsoleUI.Pages;
-using Contracts;
 using Contracts.Interfaces;
 using Spectre.Console;
 
 namespace ConsoleUI;
 
 public class ConsoleApp(
-    IAnsiConsole console, 
-    IRecipeService recipeService, 
+    IAnsiConsole console,
+    IRecipeService recipeService,
     IShoppingListService shoppingListService,
     IYandexDiskService yandexDiskService,
     IGigaChatService gigaChatService
@@ -21,11 +20,9 @@ public class ConsoleApp(
 
     public void Run()
     {
-        bool run = true;
-        MainPage mainPage = new(Console, RecipeService, ShoppingListService, YandexDiskService, GigaChatService, () => run = false);
-        while (run)
-        {
-            mainPage.Show();
-        }
+        var run = true;
+        MainPage mainPage = new(Console, RecipeService, ShoppingListService, YandexDiskService, GigaChatService,
+            () => run = false);
+        while (run) mainPage.Show();
     }
 }

@@ -1,14 +1,16 @@
 ﻿using System.Security.Authentication;
 using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
-using Contracts;
-using Contracts.Enums;
 using Contracts.Interfaces;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
-public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQuery query, IYandexDiskService diskService)
+public class ExportPage(
+    IAnsiConsole console,
+    IRecipeService service,
+    RecipesQuery query,
+    IYandexDiskService diskService)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
@@ -18,21 +20,21 @@ public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQue
     public void Show()
     {
         Console.Clear();
-        bool local = Console.Prompt(
+        var local = Console.Prompt(
             new SelectionPrompt<string>().Title("Сохранить на").AddChoices("Этот компьютер", "Яндекс Диск")
         ) == "Этот компьютер";
-        
-        FileFormat format = new SelectFormatPrompt(Console, "Выберите формат экспорта").Ask();
-        string? filepath = new FilepathPrompt(Console, "Введите путь до файла", false, format).Ask();
-        
+
+        var format = new SelectFormatPrompt(Console, "Выберите формат экспорта").Ask();
+        var filepath = new FilepathPrompt(Console, "Введите путь до файла", false, format).Ask();
+
         if (filepath == null) return;
 
         if (
-            local 
-            && File.Exists(filepath) 
+            local
+            && File.Exists(filepath)
             && !new ConfirmPrompt(Console, "Файл уже существует. Перезаписать?").Ask()
         ) return;
-        
+
         if (!local && DiskService.OAuthToken == null)
         {
             DiskService.OpenAuthorizationPage();
@@ -42,7 +44,7 @@ public class ExportPage(IAnsiConsole console, IRecipeService service, RecipesQue
 
         try
         {
-            Service.Export(filepath, format, Query,local);
+            Service.Export(filepath, format, Query, local);
             new MessagePage(Console, new SuccessText("Файл сохранен\n")).Show();
         }
         catch (UnauthorizedAccessException)

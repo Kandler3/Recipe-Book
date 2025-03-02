@@ -1,6 +1,5 @@
 ﻿using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
-using Contracts;
 using Contracts.Interfaces;
 using Models;
 using Spectre.Console;
@@ -9,18 +8,6 @@ namespace ConsoleUI.Pages;
 
 public class RecipesListPage
 {
-    private IAnsiConsole Console { get; }
-    private IRecipeService RecipeService { get; }
-    private RecipesQuery RecipesQuery { get; }
-    private IList<Recipe> Recipes { get; set; }
-
-    private int PageSize { get; } = 10;
-    private int CurrentPage { get; set; } = 0;
-    private int SelectedIndex { get; set; }
-    private int MaxPage => Recipes.Count / PageSize + (Recipes.Count % PageSize > 0 ? 1 : 0);
-    private int MinIndex => CurrentPage * PageSize;
-    private int MaxIndex => int.Min((CurrentPage + 1) * PageSize, Recipes.Count);
-
     public RecipesListPage(IAnsiConsole console, IRecipeService recipeService, RecipesQuery query)
     {
         Console = console;
@@ -28,6 +15,18 @@ public class RecipesListPage
         RecipesQuery = query;
         Recipes = RecipeService.GetRecipes(RecipesQuery);
     }
+
+    private IAnsiConsole Console { get; }
+    private IRecipeService RecipeService { get; }
+    private RecipesQuery RecipesQuery { get; }
+    private IList<Recipe> Recipes { get; set; }
+
+    private int PageSize { get; } = 10;
+    private int CurrentPage { get; set; }
+    private int SelectedIndex { get; set; }
+    private int MaxPage => Recipes.Count / PageSize + (Recipes.Count % PageSize > 0 ? 1 : 0);
+    private int MinIndex => CurrentPage * PageSize;
+    private int MaxIndex => int.Min((CurrentPage + 1) * PageSize, Recipes.Count);
 
     public void Show()
     {
@@ -37,8 +36,8 @@ public class RecipesListPage
             new MessagePage(Console, new Text("Нет рецептов\n")).Show();
             return;
         }
-        
-        bool run = true;
+
+        var run = true;
         ConsoleKey key;
         do
         {
@@ -52,36 +51,36 @@ public class RecipesListPage
                 )
             );
             Console.Cursor.Hide();
-            
+
             key = System.Console.ReadKey(true).Key;
             switch (key)
             {
-                case ConsoleKey.Enter: 
+                case ConsoleKey.Enter:
                     if (Recipes.Count > 0)
                         new RecipePage(Console, RecipeService, Recipes[SelectedIndex]).Show();
                     break;
-                
+
                 case ConsoleKey.Backspace:
                     run = false;
                     break;
-                
+
                 case ConsoleKey.Delete:
                     OnDeleteRecipe();
                     break;
-                
+
                 case ConsoleKey.UpArrow when SelectedIndex > MinIndex:
                     SelectedIndex--;
                     break;
-                
+
                 case ConsoleKey.DownArrow when SelectedIndex < MaxIndex - 1:
                     SelectedIndex++;
                     break;
-                
+
                 case ConsoleKey.LeftArrow when CurrentPage > 0:
                     CurrentPage--;
                     SelectedIndex = CurrentPage * PageSize;
                     break;
-                
+
                 case ConsoleKey.RightArrow when CurrentPage < MaxPage - 1:
                     CurrentPage++;
                     SelectedIndex = CurrentPage * PageSize;
@@ -94,7 +93,7 @@ public class RecipesListPage
     {
         if (Recipes.Count == 0)
             return;
-        
+
         if (!new ConfirmPrompt(
                 Console, $"Вы уверены, что хотите удалить рецепт \"{Recipes[SelectedIndex].Title}\"?").Ask()
            )

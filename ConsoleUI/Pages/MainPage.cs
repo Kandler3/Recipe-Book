@@ -6,9 +6,9 @@ using Spectre.Console;
 namespace ConsoleUI.Pages;
 
 public class MainPage(
-    IAnsiConsole console, 
-    IRecipeService recipeService, 
-    IShoppingListService shoppingListService, 
+    IAnsiConsole console,
+    IRecipeService recipeService,
+    IShoppingListService shoppingListService,
     IYandexDiskService yandexDiskService,
     IGigaChatService gigaChatService,
     Action onReturn
@@ -79,10 +79,10 @@ public class MainPage(
     private void OnExit()
     {
         YandexDiskService.SaveOAuthToken();
-        
+
         if (new ConfirmPrompt(Console, "Сохранить данные перед выходом?").Ask())
             new ExportPage(Console, RecipeService, RecipesQuery, YandexDiskService).Show();
-        
+
         OnReturn();
     }
 

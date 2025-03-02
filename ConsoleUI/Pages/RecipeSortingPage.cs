@@ -1,5 +1,4 @@
 ﻿using ConsoleUI.Prompts;
-using Contracts;
 using Contracts.Enums;
 using Spectre.Console;
 
@@ -13,8 +12,8 @@ public class RecipeSortingPage(IAnsiConsole console, RecipesQuery query)
     public void Show()
     {
         Console.Clear();
-        
-        string choice = Console.Prompt(
+
+        var choice = Console.Prompt(
             new SelectionPrompt<string>()
                 .Title("Выберите поле для сортировки")
                 .AddChoices("Название", "Категория", "Сбросить", "Назад")
@@ -22,9 +21,15 @@ public class RecipeSortingPage(IAnsiConsole console, RecipesQuery query)
 
         switch (choice)
         {
-            case "Название": Query.SortingParameter = RecipeSortingParameter.Title; break;
-            case "Категория": Query.SortingParameter = RecipeSortingParameter.Category; break;
-            case "Сбросить": ShowResetPrompt(); return;
+            case "Название":
+                Query.SortingParameter = RecipeSortingParameter.Title;
+                break;
+            case "Категория":
+                Query.SortingParameter = RecipeSortingParameter.Category;
+                break;
+            case "Сбросить":
+                ShowResetPrompt();
+                return;
             case "Назад": return;
             default: return;
         }

@@ -6,12 +6,6 @@ namespace ConsoleUI.Widgets;
 
 public class RecipesTable : IRenderable
 {
-    private IList<Recipe> Recipes { get; }
-    private int Selected { get; }
-    private int Page { get; }
-    private int MaxPage { get; }
-    private Table Table { get; set; }
-
     public RecipesTable(IList<Recipe> recipes, int selected, int page, int maxPage)
     {
         Recipes = recipes;
@@ -19,16 +13,31 @@ public class RecipesTable : IRenderable
         Page = page;
         MaxPage = maxPage;
         Table = BuildTable();
-
     }
-    
+
+    private IList<Recipe> Recipes { get; }
+    private int Selected { get; }
+    private int Page { get; }
+    private int MaxPage { get; }
+    private Table Table { get; }
+
+    public Measurement Measure(RenderOptions options, int maxWidth)
+    {
+        return ((IRenderable)Table).Measure(options, maxWidth);
+    }
+
+    public IEnumerable<Segment> Render(RenderOptions options, int maxWidth)
+    {
+        return ((IRenderable)Table).Render(options, maxWidth);
+    }
+
     private Table BuildTable()
     {
         Table table = new();
-        
+
         table.AddColumn("[bold]Название[/]");
         table.AddColumn("[bold]Категория[/]");
-        
+
         table.Caption =
             new TableTitle(
                 $"Страница {Page + 1}/{MaxPage}\n"
@@ -39,17 +48,8 @@ public class RecipesTable : IRenderable
                 + "Backspace: назад"
             );
 
-        for (int i = 0; i < Recipes.Count; i++)
-        {
-            table.AddRow(Utils.GetRowFromRecipe(Recipes[i], i == Selected));
-        }
-        
+        for (var i = 0; i < Recipes.Count; i++) table.AddRow(Utils.GetRowFromRecipe(Recipes[i], i == Selected));
+
         return table;
     }
-
-    public Measurement Measure(RenderOptions options, int maxWidth) => 
-        ((IRenderable)Table).Measure(options, maxWidth);
-    
-    public IEnumerable<Segment> Render(RenderOptions options, int maxWidth) => 
-        ((IRenderable)Table).Render(options, maxWidth);
 }

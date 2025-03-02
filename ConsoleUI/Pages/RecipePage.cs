@@ -1,13 +1,12 @@
 ﻿using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
-using Contracts;
 using Contracts.Interfaces;
 using Models;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;
 
-public class RecipePage(IAnsiConsole console, IRecipeService service,Recipe recipe)
+public class RecipePage(IAnsiConsole console, IRecipeService service, Recipe recipe)
 {
     private IAnsiConsole Console { get; } = console;
     private IRecipeService Service { get; } = service;
@@ -15,11 +14,10 @@ public class RecipePage(IAnsiConsole console, IRecipeService service,Recipe reci
 
     public void Show()
     {
-        
         Console.Clear();
         Console.Write(new RecipePanel(PanelRecipe));
 
-        string option = Console.Prompt(
+        var option = Console.Prompt(
             new SelectionPrompt<string>()
                 .AddChoices(
                     "Добавить изображение",
@@ -28,9 +26,9 @@ public class RecipePage(IAnsiConsole console, IRecipeService service,Recipe reci
         );
         if (option.Equals("Добавить изображение"))
         {
-            string? imagePath = new FilepathPrompt(Console, "Введите путь до изображения", true).Ask();
+            var imagePath = new FilepathPrompt(Console, "Введите путь до изображения", true).Ask();
             if (imagePath == null) return;
-            
+
             Service.AddRecipeImage(PanelRecipe, imagePath);
 
             Show();

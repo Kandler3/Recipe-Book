@@ -1,5 +1,4 @@
 ﻿using ConsoleUI.Widgets;
-using Contracts;
 using Contracts.Interfaces;
 using Models;
 using Spectre.Console;
@@ -7,9 +6,9 @@ using Spectre.Console;
 namespace ConsoleUI.Pages;
 
 public class GenerateShoppingListPage(
-    IAnsiConsole console, 
-    IRecipeService recipeService, 
-    RecipesQuery query, 
+    IAnsiConsole console,
+    IRecipeService recipeService,
+    RecipesQuery query,
     IShoppingListService shoppingListService
 )
 {
@@ -27,7 +26,7 @@ public class GenerateShoppingListPage(
             new MessagePage(Console, new ErrorText("Нет рецептов\n")).Show();
             return;
         }
-        
+
         var selectedRecipes = Console.Prompt(
             new MultiSelectionPrompt<Recipe>().AddChoices(recipes)
         );

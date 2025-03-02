@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Contracts;
 using Contracts.Interfaces;
 using Models;
 
@@ -8,14 +7,6 @@ namespace Serializers;
 public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
 {
     private TxtIngredientSerializer IngredientSerializer { get; } = new();
-    private enum Field
-    {
-        Title,
-        Category,
-        Ingredients,
-        Instruction,
-        Images
-    }
 
     private Dictionary<Field, string> FieldNames { get; } = new
     ([
@@ -31,7 +22,7 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         List<Recipe> res = [];
         using var reader = new StreamReader(filepath);
         StringBuilder sb = new();
-        string? line = reader.ReadLine();
+        var line = reader.ReadLine();
         while (line != null)
         {
             if (line == "")
@@ -46,20 +37,20 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
             {
                 sb.Append(line + "\n");
             }
-            
+
             line = reader.ReadLine();
         }
-        
+
         if (sb.Length > 0)
             res.Add(DeserializeRecipe(sb.ToString()));
-        
+
         return res;
     }
 
     public void FileSerialize(IEnumerable<Recipe> recipes, string filepath)
     {
         using var writer = new StreamWriter(filepath);
-        foreach (Recipe recipe in recipes)
+        foreach (var recipe in recipes)
         {
             writer.WriteLine(SerializeRecipe(recipe));
             writer.WriteLine();
@@ -73,9 +64,9 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         List<Ingredient> ingredients = [];
         List<string> instruction = [];
         List<string> images = [];
-        
-        Field currentField = Field.Title;
-        foreach(string line in recipeString.Split("\n", StringSplitOptions.RemoveEmptyEntries))
+
+        var currentField = Field.Title;
+        foreach (var line in recipeString.Split("\n", StringSplitOptions.RemoveEmptyEntries))
         {
             if (line.StartsWith('-'))
             {
@@ -88,28 +79,28 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
                     case Field.Instruction:
                         instruction.Add(line.TrimStart('-').Trim());
                         break;
-                    
+
                     case Field.Images:
                         images.Add(line.TrimStart('-').Trim());
                         break;
 
                     default: throw new FormatException("Invalid file format");
                 }
+
                 continue;
             }
-            
+
             if (title != null)
                 do
                 {
                     currentField++;
                     if (currentField > Field.Images)
                         throw new FormatException("Invalid file format");
-                    
                 } while (!line.StartsWith(FieldNames[currentField]));
-            
+
             else if (!line.StartsWith(FieldNames[currentField]))
                 throw new FormatException("Invalid file format");
-            
+
             try
             {
                 switch (currentField)
@@ -126,22 +117,19 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
                         break;
                 }
             }
-            
+
             catch (ArgumentOutOfRangeException e)
             {
                 throw new FormatException("Invalid file format", e);
             }
         }
 
-        if (title == null)
-        {
-            throw new FormatException("Recipe must include title");
-        }
-        
+        if (title == null) throw new FormatException("Recipe must include title");
+
         return new Recipe(
-            title, 
-            category, 
-            ingredients.Count != 0 ? ingredients : null, 
+            title,
+            category,
+            ingredients.Count != 0 ? ingredients : null,
             instruction.Count != 0 ? instruction : null,
             images.Count != 0 ? images : null
         );
@@ -149,10 +137,10 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
 
     private static string GetContent(string line)
     {
-        string res = line[(line.IndexOf(':') + 1)..].Trim();
+        var res = line[(line.IndexOf(':') + 1)..].Trim();
         if (res == "")
             throw new FormatException("Invalid file format");
-        
+
         return res;
     }
 
@@ -166,23 +154,33 @@ public class TxtRecipeSerializer : IRecipeSerializer, ISingleRecipeSerializer
         if (recipe.Ingredients != null)
         {
             sb.Append($"{FieldNames[Field.Ingredients]}\n");
-            foreach (Ingredient ingredient in recipe.Ingredients)
+            foreach (var ingredient in recipe.Ingredients)
                 sb.Append($"- {IngredientSerializer.Serialize(ingredient)}\n");
         }
 
         if (recipe.Instructions != null)
         {
             sb.Append($"{FieldNames[Field.Instruction]}\n");
-            foreach (string instruction in recipe.Instructions)
+            foreach (var instruction in recipe.Instructions)
                 sb.Append($"- {instruction}\n");
         }
+
         if (recipe.Images != null)
         {
             sb.Append($"{FieldNames[Field.Images]}\n");
-            foreach (string image in recipe.Images)
+            foreach (var image in recipe.Images)
                 sb.Append($"- {image}\n");
         }
-        
+
         return sb.ToString();
+    }
+
+    private enum Field
+    {
+        Title,
+        Category,
+        Ingredients,
+        Instruction,
+        Images
     }
 }

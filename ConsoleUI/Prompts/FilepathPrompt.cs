@@ -1,5 +1,4 @@
 ﻿using ConsoleUI.Widgets;
-using Contracts;
 using Contracts.Enums;
 using Spectre.Console;
 
@@ -16,13 +15,13 @@ public class FilepathPrompt(IAnsiConsole console, string message, bool existingF
     {
         Console.Clear();
         Console.Write(new HintText("Чтобы вернуться введите пустую строку\n"));
-        string result = Console.Prompt(
+        var result = Console.Prompt(
             new TextPrompt<string>(Message).AllowEmpty()
         );
-        
+
         if (result == "") return null;
-        
-        while (!IsValidPath(result, out string error))
+
+        while (!IsValidPath(result, out var error))
         {
             Console.Clear();
             Console.Write(new HintText("Чтобы вернуться введите пустую строку\n"));
@@ -30,10 +29,10 @@ public class FilepathPrompt(IAnsiConsole console, string message, bool existingF
             result = Console.Prompt(
                 new TextPrompt<string>(Message).AllowEmpty()
             );
-        
+
             if (result == "") return null;
         }
-        
+
         return result;
     }
 
@@ -44,8 +43,8 @@ public class FilepathPrompt(IAnsiConsole console, string message, bool existingF
             message = "Неверный формат файла";
             return false;
         }
-        
-        string? directory = Path.GetDirectoryName(path);
+
+        var directory = Path.GetDirectoryName(path);
         if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
         {
             message = $"Директория {directory} не найдена";

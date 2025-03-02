@@ -3,5 +3,5 @@
 public enum RecipeSortingParameter
 {
     Title,
-    Category,
+    Category
 }

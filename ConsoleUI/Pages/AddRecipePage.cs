@@ -1,6 +1,5 @@
 ﻿using ConsoleUI.Prompts;
 using ConsoleUI.Widgets;
-using Contracts;
 using Contracts.Interfaces;
 using Models;
 using Spectre.Console;
@@ -16,9 +15,9 @@ public class AddRecipePage(IAnsiConsole console, IRecipeService service)
     {
         var title = Console.Prompt(new TextPrompt<string>("Название рецепта: "));
         var category = Console.Prompt(new TextPrompt<string>("Категория: ").AllowEmpty());
-        List<Ingredient> ingredients = new ListPrompt<Ingredient>(Console,
+        var ingredients = new ListPrompt<Ingredient>(Console,
             "Ингредиенты (формат: \"[название] - [количество] [ед. измерения]\"): ", ParseIngredient).Ask();
-        List<string> instructions = new ListPrompt<string>(Console, "Инструкция: ", str => str).Ask();
+        var instructions = new ListPrompt<string>(Console, "Инструкция: ", str => str).Ask();
 
         Service.AddRecipe(new Recipe(
             title,
@@ -26,24 +25,25 @@ public class AddRecipePage(IAnsiConsole console, IRecipeService service)
             ingredients.Count != 0 ? ingredients : null,
             instructions.Count != 0 ? instructions : null
         ));
-        
+
         new MessagePage(Console, new SuccessText("Рецепт добавлен\n")).Show();
     }
-    
+
     private static Ingredient ParseIngredient(string input)
     {
-        string[] args = input.Split(" - ", 2, StringSplitOptions.TrimEntries);
-        string name = args[0];
-        
+        var args = input.Split(" - ", 2, StringSplitOptions.TrimEntries);
+        var name = args[0];
+
         if (args.Length == 1)
             return new Ingredient(name);
-        
-        string[] quantityArgs = args[1].Split(' ', 2, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        
-        if (!int.TryParse(quantityArgs[0], out int quantity) || quantity <= 0)
+
+        var quantityArgs =
+            args[1].Split(' ', 2, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        if (!int.TryParse(quantityArgs[0], out var quantity) || quantity <= 0)
             throw new FormatException("Ingredient quantity must be an integer greater than 0");
-        
-        string? measurement = quantityArgs.Length > 1 ? quantityArgs[1] : null;
+
+        var measurement = quantityArgs.Length > 1 ? quantityArgs[1] : null;
         return new Ingredient(name, quantity, measurement);
     }
 }

@@ -12,14 +12,14 @@ public class QueryPage(IAnsiConsole console, IRecipeService service, RecipesQuer
 
     public void Show()
     {
-        bool run = true;
+        var run = true;
         {
             while (run)
             {
                 Console.Clear();
                 Console.Write(new QueryPanel(Query));
 
-                MenuOption option = Console.Prompt(
+                var option = Console.Prompt(
                     new SelectionPrompt<MenuOption>()
                         .AddChoices(
                             new MenuOption("Выбрать параметры для удаления",

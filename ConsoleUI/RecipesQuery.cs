@@ -1,21 +1,17 @@
-﻿using Contracts;
-using Contracts.Enums;
+﻿using Contracts.Enums;
 using Contracts.Interfaces;
-using Models;
 
 namespace ConsoleUI;
 
 public class RecipesQuery : IRecipesQuery
 {
+    public List<string> CategoriesList { get; } = [];
+
+    public List<string> IngredientsList { get; } = [];
+
     public string? TitleSearchQuery { get; set; }
-
-    private readonly List<string> _categories = [];
-    public List<string> CategoriesList => _categories;
-    public IEnumerable<string>? Categories => _categories.Count > 0 ? _categories : null;
-
-    private readonly List<string> _ingredients = [];
-    public List<string> IngredientsList => _ingredients;
-    public IEnumerable<string>? Ingredients => _ingredients.Count > 0 ? _ingredients : null;
+    public IEnumerable<string>? Categories => CategoriesList.Count > 0 ? CategoriesList : null;
+    public IEnumerable<string>? Ingredients => IngredientsList.Count > 0 ? IngredientsList : null;
     public RecipeSortingParameter? SortingParameter { get; set; }
     public bool? AscendingSorting { get; set; }
 

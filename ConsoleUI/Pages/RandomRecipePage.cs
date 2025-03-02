@@ -1,7 +1,5 @@
 ﻿using ConsoleUI.Widgets;
-using Contracts;
 using Contracts.Interfaces;
-using Models;
 using Spectre.Console;
 
 namespace ConsoleUI.Pages;
@@ -14,9 +12,9 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
     private Text Header { get; } = new(
         "Рецепт дня!\n",
         new Style(
-            foreground: ConsoleColor.Magenta,
-            background: ConsoleColor.Black,
-            decoration: Decoration.RapidBlink
+            ConsoleColor.Magenta,
+            ConsoleColor.Black,
+            Decoration.RapidBlink
         )
     );
 
@@ -29,10 +27,12 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
         Console.Clear();
         Console.Write(Header);
 
-        IList<Recipe> recipes = Service.GetRecipes(new RecipesQuery());
+        var recipes = Service.GetRecipes(new RecipesQuery());
 
         if (recipes.Count == 0)
+        {
             Console.Write(NoRecipesText);
+        }
 
         else
         {
@@ -40,7 +40,7 @@ public class RandomRecipePage(IAnsiConsole console, IRecipeService service)
             var recipe = recipes.ElementAt(random.Next(0, recipes.Count));
             Console.Write(new RecipePanel(recipe));
         }
-        
+
         Console.Write(ReturnText);
         Console.Cursor.Show(false);
 

@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using CsvHelper.Configuration;
+﻿using CsvHelper.Configuration;
 using Models;
 
 namespace Serializers;

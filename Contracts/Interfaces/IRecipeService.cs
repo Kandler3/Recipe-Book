@@ -11,6 +11,6 @@ public interface IRecipeService
     public void AddRecipe(Recipe recipe);
     public void DeleteRecipe(Recipe recipe);
     public void AddRecipeImage(Recipe recipe, string imagePath);
-    public void Import(string filepath, FileFormat format, bool local=true);
+    public void Import(string filepath, FileFormat format, bool local = true);
     public void Export(string filepath, FileFormat format, IRecipesQuery? query = null, bool local = true);
 }

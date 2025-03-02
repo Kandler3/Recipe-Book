@@ -5,9 +5,8 @@ using Spectre.Console.Rendering;
 
 namespace ConsoleUI.Widgets;
 
-public class RecipePanel: IRenderable
+public class RecipePanel : IRenderable
 {
-    private Layout RecipeLayout { get; }
     public RecipePanel(Recipe recipe)
     {
         RecipeLayout = new Layout().SplitColumns(new Layout("Tree"), new Layout("Images"));
@@ -15,9 +14,21 @@ public class RecipePanel: IRenderable
         RecipeLayout["Images"].Update(GenerateImagesColumn(recipe));
     }
 
+    private Layout RecipeLayout { get; }
+
+    public Measurement Measure(RenderOptions options, int maxWidth)
+    {
+        return ((IRenderable)RecipeLayout).Measure(options, maxWidth);
+    }
+
+    public IEnumerable<Segment> Render(RenderOptions options, int maxWidth)
+    {
+        return ((IRenderable)RecipeLayout).Render(options, maxWidth);
+    }
+
     private static Tree GenerateTree(Recipe recipe)
     {
-        var tree = new Tree(new Text(recipe.Title, style: new Style(decoration: Decoration.Bold)));
+        var tree = new Tree(new Text(recipe.Title, new Style(decoration: Decoration.Bold)));
         if (recipe.Category != null)
             tree.AddNode(new Text($"Категория: {recipe.Category}"));
 
@@ -52,8 +63,7 @@ public class RecipePanel: IRenderable
             return new Columns().Collapse();
 
         List<IRenderable> images = [];
-        foreach (string path in recipe.Images)
-        {
+        foreach (var path in recipe.Images)
             try
             {
                 images.Add(new CanvasImage(path).MaxWidth(15));
@@ -62,14 +72,7 @@ public class RecipePanel: IRenderable
             {
                 images.Add(new Text($"Не удалось загрузить изображение {path}"));
             }
-        }
-        
+
         return new Columns(images).Expand();
     }
-
-    public Measurement Measure(RenderOptions options, int maxWidth) =>
-        ((IRenderable)RecipeLayout).Measure(options, maxWidth);
-
-    public IEnumerable<Segment> Render(RenderOptions options, int maxWidth) => 
-        ((IRenderable)RecipeLayout).Render(options, maxWidth);
 }
